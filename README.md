@@ -1,119 +1,97 @@
-# Voici le readme
+# 🏛️ Projet AGORA — Plateforme de Consultation & Débat Citoyen
 
-A qui ça correspond : Tout les citoyens français majeur 
-situation fictive : 
-Citoyens : personne majeur qui veut donner son avis, faire des demandes de lois, débat sur les lois proposées par les autres citoyens
-Modérateur : vérification des rôles, vérification des loi proposée, gestion du site, choix de la bonne catégorie de la loi    
-Responsable institutionnel : Reçoit les résultats des votes dès que ces derniers sont terminés ; apporte des précisions sur n’importe quels sujets, ces précisions sont mises en avant.
-Personnas
-Citoyen : 
-Objectifs : proposer des projet de loi, débattre avec d’autre citoyens et voter pour ou contre les proposition de loi 
-Contexte : posséder un moyens de se connecter à internet 
-Contraintes : création de compte, fuite de donnée 
-Motivations et frustrations : débattre avec d’autres citoyens  
-Scénario : utilisation simple du site internet 
+> Prototype fonctionnel d'espace civique interactif facilitant la proposition de lois, la délibération citoyenne et le retour institutionnel direct.
 
-	
+---
 
-Modérateur
-Objectifs : Garder un site modéré (débat, proposition) , agréable pour les utilisateur, gérer les rôles 
-Contexte : Rôle modérateur du site, gestion de base de données, ordinateur, téléphone (web) 
-Contraintes : accès à internet, impartialité ( ne pas supprimer des débat parce qu’il sont contraire à ces idées), Savoir quoi supprimer
-Motivations et frustrations : Utilité dans les débat public
-Scénario : examiner un signalement et modérer une contribution
+## 🎯 Contexte & Problématique
 
+### Le Constat
+Les citoyens éprouvent souvent le sentiment que leur voix n'a pas d'impact concret : ils ne savent ni comment proposer une loi ou une idée, ni si leurs avis sont réellement pris en compte par les décideurs publics.
 
+### Proposition de Valeur
+**AGORA** crée un pont transparent entre citoyens et institutions :
+1. Les citoyens débattent et votent sur des propositions d'intérêt public.
+2. Les modérateurs assurent des échanges constructifs et impartiaux.
+3. Les responsables institutionnels examinent les propositions clés et s'engagent en publiant des **réponses officielles**, bouclant ainsi la boucle de participation.
 
-Responsable institutionnel : 
-Objectifs : Récupérer les résultats
-Contexte : Possède un ordinateur et téléphone, compétence informatique limitée
-Contraintes :  compétence informatique limitée, consultation sur téléphone et ordinateur
-Motivations et frustrations : Avoir des nouvelles idées de loi 
-Scénario : Recevoir les données
-	
+*Note de cadrage : Vote simulé et consultatif à visée pédagogique. Hors périmètre : authentification forte par identité numérique régalienne, API backend distante et scrutin légal contraignant.*
 
-Remodeler le sujet: 
+---
 
+## 👥 Personas & Rôles
 
+| Rôle | Profil / Persona | Objectifs | Contraintes & Enjeux |
+| :--- | :--- | :--- | :--- |
+| **Citoyen** | *Ex. Thomas, 35 ans*<br>Mobile-first, méfiant vis-à-vis des promesses politiques. | Proposer des projets de loi, débattre, voter pour/contre. | Craint la fuite de données privées et le manque d'écoute. Veut un usage fluide et direct. |
+| **Modérateur** | *Équipe de modération*<br>Utilisation Web / Desktop, volume de signalements important. | Maintenir un espace respectueux, catégoriser, traiter les signalements. | Doit rester impartial (ne pas censurer selon ses opinions), motiver chaque décision d'action. |
+| **Responsable Institutionnel** | *Claire, 48 ans*<br>Chargée de mission en ministère fictif, peu de temps. | Repérer les propositions à fort impact (> 500 votes) et apporter une réponse officielle argumentée. | Compétences informatiques standards, besoin de synthèses claires et fiables (détection d'anomalies de vote). |
 
+---
 
+## 🧭 Parcours Utilisateurs Clés
 
-Plan projet AGORA (3 personnes, 5 séances)
-Le piège à éviter : la note récompense la compréhension des besoins, pas une belle interface générée par IA. Chaque choix doit pouvoir se justifier à l’oral.
-Répartition conseillée
-A, UX & doc : note de cadrage, personas, parcours, tests, support d’oral
-B, Front citoyen : explorer, fiche proposition, vote, dépôt
-C, Front modérateur + institutionnel + qualité : espace modérateur, tableau institutionnel, statuts, données JSON, accessibilité/responsive (A peut prendre la fiche d’examen si C est surchargé)
-Tout le monde participe aux tests et à l’oral (la répartition de la parole est notée).
-Avant S2 (à faire maintenant)
-Créer un repo GitHub et un doc partagé
-Choisir la stack : HTML/CSS/JS vanilla + JSON + localStorage, hébergé sur GitHub Pages (une URL dispo = maquette “lançable sans le groupe” ✅)
-Chacun lit le sujet 6 et note 3 frustrations réelles sur la participation citoyenne (pétitions, consultations publiques…)
-Bonus solide : 3 à 5 mini-entretiens de 5 min avec des proches, pour que les personas soient “fondés sur des indices”
-S2 — Cadrage (livrables 1 et 2)
-Note de cadrage (1–2 pages)
-Problème : les citoyens ne savent pas comment proposer ni si leur avis compte
-Cible, proposition de valeur, périmètre, hypothèses
-Hors périmètre : vrai vote, authentification réelle, API
-Les 3 personas
-Citoyen : ex. 35 ans, sur mobile, méfiant, veut savoir si son avis sert à quelque chose
-Modérateur : charge de travail élevée, a besoin de règles claires
-Responsable institutionnel : Claire, 48 ans, chargée de mission dans un ministère fictif
-Objectif : repérer vite les propositions à examiner et rendre compte de la suite donnée
-Contexte : sur ordinateur, peu de temps, obligation de neutralité
-Frustration : chiffres bruts sans contexte, peur des votes manipulés
-Attente : synthèse fiable et moyen simple de répondre aux citoyens
-Parcours détaillés (étape → action → émotion → obstacle → donnée)
-Citoyen : découvrir → déposer une proposition → voter sur une autre
-Modérateur : recevoir un signalement → examiner → décider et motiver
-Responsable institutionnel (bonus au-delà des 2 exigés) : tableau de bord → filtrer les propositions au-dessus d’un seuil (ex. 500 votes) → ouvrir une fiche d’examen → passer en “examinée” puis “clôturée” → rédiger une réponse officielle → le citoyen auteur la voit dans “Mes contributions”
-Ce 3e parcours boucle la boucle : le citoyen voit que son avis a été lu, ce qui répond directement au problème de départ.
-Ensuite : arborescence et wireframes papier ou Figma.
-Les vues à prévoir
-Accueil / Explorer : filtres par thème, tri par popularité ou date, recherche
-Fiche proposition : contexte, texte, impact, statut, arguments pour/contre, vote, bouton signaler, réponse officielle si clôturée
-Déposer une proposition : formulaire en étapes (titre, contexte, texte, thème, impact) avec aperçu
-Confirmation + Mes contributions : suivi du statut et réponse institutionnelle
-File de modération : signalements triés par gravité
-Détail signalement : contenu, motif, actions (valider / masquer / demander une modif), justification obligatoire
-Tableau institutionnel : compteurs par statut, top propositions par thème, filtres (thème, seuil de votes, date), graphique simple doublé d’un tableau pour l’accessibilité
-Fiche d’examen : résultat pour/contre avec le nombre de votants, synthèse des 3 meilleurs arguments de chaque côté, indicateur de fiabilité (pic de votes suspect, part de comptes récents), historique de modération, sélecteur de statut et champ “Réponse officielle”
-Règles & transparence : fonctionnement des votes, de la modération, et limites
-Ça fait 9 vues, un poil au-dessus de la fourchette de 5 à 8. Si vous manquez de temps, fusionnez la 9 dans un pied de page ou une modale.
-Un sélecteur de rôle en haut (citoyen / modérateur / institution) sert pour la démo, annoncé comme simulé.
-Actions métier simulées (il en faut 2, vise 5)
-Déposer une proposition, avec validation et erreurs précises
-Voter pour ou contre, avec compteur à jour et un seul vote possible
-Signaler un argument
-Modérer un contenu, avec le motif visible publiquement
-Clôturer une proposition avec réponse officielle : le champ est obligatoire (erreur claire s’il est vide), le statut se met à jour partout (explorer, fiche, mes contributions), et la réponse est enregistrée en localStorage
-Points éthiques à rendre visibles (gros levier de note)
-Bandeau permanent : “Vote consultatif et simulé, pas un scrutin officiel”
-Afficher le nombre de votants à côté des %, avec la mention “non représentatif de la population”
-Anti-manipulation : 1 vote par compte, mention de la détection de votes massifs, alertes de fiabilité côté institution (signalement sans blocage automatique)
-Protection des opinions : votes individuels jamais publics, pseudonymes. Le responsable institutionnel ne voit que des agrégats, jamais qui a voté quoi
-Modération transparente : règles publiques, motif affiché, recours possible
-Statuts clairs : soumise → en discussion → examinée → clôturée, avec la mention “Résultat consultatif, ne constitue pas une décision”
-Réponse officielle publique : c’est un gage de transparence qui limite les décisions opaques
-S3 — Prototype V1
-C fait le JSON fictif (environ 15 propositions et 5 signalements) ainsi que la structure et la navigation
-B fait les parcours citoyen
-C fait les parcours modérateur et institutionnel, avec un composant tableau/statut commun aux deux
-A rédige les scénarios de test, vérifie la cohérence avec les parcours, et peut prendre la fiche d’examen
-Objectif fin de séance : les parcours fonctionnent de bout en bout
-S4 — Tests et corrections (livrable 4)
-Protocole : 3 à 5 personnes extérieures, une tâche sans explication (ex. “proposez une idée sur le thème Environnement puis votez contre une autre”, ou “clôturez la proposition la plus votée en y répondant”), l’observateur ne guide pas
-Noter : réussite, temps, hésitations, verbatims
-Retenir 2 corrections justifiées (ex. “3 testeurs sur 4 n’ont pas compris que le vote était définitif, donc ajout d’une confirmation”)
-Checklist accessibilité : navigation au Tab, focus visible, labels sur les champs, contrastes, information jamais portée par la couleur seule (pour/contre = couleur et icône ou texte), affichage mobile
-Préparer l’oral et le répéter une fois en chronométrant
-S5 — Soutenance (15 min + 5 min de questions)
-2–3 min : problème et personas
-6–7 min : démo des parcours en direct (citoyen → modérateur → institution, ce qui raconte une histoire complète)
-3 min : tests et corrections
-2 min : limites éthiques et techniques, usage de l’IA, prochaine amélioration
-Préparer une réponse aux 5 questions types du cahier des charges, surtout “qu’avez-vous changé après les tests ?”
-Usage de l’IA
-Il est autorisé mais doit être déclaré. Notez au fur et à mesure quel outil a servi à quoi et ce que vous avez dû corriger, c’est attendu à l’oral.
+1. **Parcours Citoyen :** Découverte de la plateforme $\rightarrow$ Dépôt d'une proposition avec impact $\rightarrow$ Consultation et vote sur d'autres propositions $\rightarrow$ Suivi de ses contributions.
+2. **Parcours Modérateur :** Notification de signalement $\rightarrow$ Analyse du contenu contesté $\rightarrow$ Décision d'action (validation, masquage, demande d'édition) avec motif public obligatoire.
+3. **Parcours Institutionnel :** Accès au tableau de bord $\rightarrow$ Filtrage par seuil de votes $\rightarrow$ Fiche d'examen et analyse des arguments $\rightarrow$ Publication de la réponse officielle publique.
 
+---
 
+## 🖥️ Architecture des Vues & Fonctionnalités
+
+Le prototype est conçu autour de 8 à 9 vues clés interconnectées :
+
+1. **Accueil / Explorer :** Recherche, tri par popularité/date et filtres thématiques.
+2. **Fiche Proposition :** Contexte, arguments pour/contre, votes, bouton de signalement et réponse institutionnelle.
+3. **Dépôt d'une proposition :** Formulaire par étapes (titre, contexte, description, impact) avec aperçu avant publication.
+4. **Mes Contributions :** Tableau de bord personnel du citoyen permettant de suivre l'avancée et les retours officiels.
+5. **File de Modération :** File d'attente priorisée par motif et gravité des signalements.
+6. **Détail Signalement :** Interface de décision du modérateur avec saisie obligatoire d'une justification.
+7. **Tableau de Bord Institutionnel :** Statistiques globales, métriques d'adhésion, indicateurs de volume et filtres.
+8. **Fiche d'Examen & Clôture :** Synthèse équilibrée des arguments, indicateurs d'anomalies de vote et saisie de la décision officielle.
+9. **Règles & Transparence (ou Modale / Footer) :** Charte éthique, explications du calcul des votes et limites du service.
+
+*Un sélecteur de rôle en en-tête permet de basculer instantanément entre Citoyen, Modérateur et Institutionnel lors de la démonstration.*
+
+---
+
+## ⚖️ Éthique, Confiance & Protection des Données
+
+* **Avertissement Permanent :** Affichage d'un bandeau rappelant le caractère consultatif et non contraignant de la consultation.
+* **Représentativité :** Mention explicite du volume brut de votants à côté des pourcentages (*"résultats non représentatifs de l'ensemble de la population"*).
+* **Protection de l'Opinion :** Vote secret, pseudonymat par défaut et agrégation des données (aucun vote individuel n'est accessible côté institutionnel).
+* **Anti-Manipulation :** Règles d'un vote unique par profil local et indicateurs d'activité suspecte (ex. pics anormaux de votes récents).
+* **Transparence Décisionnelle :** Motifs de modération consultables et obligation d'une réponse officielle pour clôturer une proposition.
+
+---
+
+## 🛠️ Choix Techniques
+
+* **Langages :** HTML5, CSS3 vanilla (responsive & accessible), JavaScript moderne (ES6+).
+* **Persistance & Données :** `localStorage` (stockage local client) et fichier initial `propositions.json`.
+* **Hébergement :** GitHub Pages (URL accessible directement, autonome et sans dépendances serveur).
+
+---
+
+## 📅 Organisation & Planning (5 Séances)
+
+### Répartition de l'Équipe
+* **Membre A (UX & Doc) :** Cadrage, personas, parcours, protocole de tests utilisateurs, support de présentation.
+* **Membre B (Front Citoyen) :** Vues Explorer, Dépôt, Fiche proposition, Vote et suivi.
+* **Membre C (Front Modération / Institution & Technique) :** Espaces Modérateur et Institutionnel, schémas de données JSON, accessibilité (a11y) et responsive design.
+
+### Calendrier
+* **Avant S2 :** Initialisation du dépôt Git, structure de base et mini-entretiens citoyens.
+* **S2 (Cadrage & UX) :** Validation de la note de cadrage, formalisation des 3 personas et wireframes.
+* **S3 (Prototype V1) :** Intégration HTML/CSS/JS, injection du jeu de données JSON et liaison des parcours de bout en bout.
+* **S4 (Tests Utilisateurs & Accessibilité) :** Tests sur 3 à 5 profils extérieurs, application de 2 corrections clés, audit accessibilité (clavier, contrastes, balises).
+* **S5 (Soutenance - 20 min) :** Présentation du problème (3 min), démonstration scénarisée (7 min), retour sur les tests (3 min), limites & éthique (2 min), échanges Q/R (5 min).
+
+---
+
+## 🤖 Journal d'Usage de l'IA (Transparence Académique)
+
+| Date | Outil Utilisé | Tâche Réalisée | Ajustement Humain Apporté |
+| :--- | :--- | :--- | :--- |
+| *Ex. S1* | *LLM* | *Génération du squelette initial du README* | *Réécriture pour intégrer les contraintes de notation du projet* |
+| *Ex. S3* | *Assistant IA* | *Génération du jeu de données JSON fictif* | *Ajustement des thématiques et du réalisme des propositions* |
