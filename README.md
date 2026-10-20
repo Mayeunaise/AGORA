@@ -1,91 +1,79 @@
-# 🏛️ Projet AGORA — Plateforme de Consultation & Débat Citoyen
+# AGORA — prototype web navigable
 
-> Prototype fonctionnel d'espace civique interactif facilitant la proposition de lois, la délibération citoyenne et le retour institutionnel direct.
+Plateforme citoyenne **fictive** : proposer des idées de lois, débattre et donner un avis favorable / défavorable.
+L'avis est **consultatif et simulé**, ce n'est jamais un vote officiel.
 
----
+Projet fil rouge « Design des usages 2027 » — sujet 6.
 
-## 🎯 Contexte & Problématique
+## Lancer le prototype
 
-### Le Constat
-Les citoyens éprouvent souvent le sentiment que leur voix n'a pas d'impact concret : ils ne savent ni comment proposer une loi ou une idée, ni si leurs avis sont réellement pris en compte par les décideurs publics.
+> Le site charge ses données avec `fetch()` : il ne fonctionne **pas** en double-cliquant sur `index.html`. Il faut un petit serveur local.
 
-### Proposition de Valeur
-**AGORA** crée un pont transparent entre citoyens et institutions :
-1. Les citoyens débattent et votent sur des propositions d'intérêt public.
-2. Les modérateurs assurent des échanges constructifs et impartiaux.
-3. Les responsables institutionnels examinent les propositions clés et s'engagent en publiant des **réponses officielles**, bouclant ainsi la boucle de participation.
+**Option 1 : VS Code + Live Server**
+1. Ouvrir le dossier `agora` dans VS Code.
+2. Installer l'extension **Live Server** (Ritwick Dey).
+3. Clic droit sur `index.html` → **Open with Live Server**.
 
-*Note de cadrage : Vote simulé et consultatif à visée pédagogique. Hors périmètre : authentification forte par identité numérique régalienne, API backend distante et scrutin légal contraignant.*
+**Option 2 : Python (déjà installé sur la plupart des machines)**
+```bash
+cd agora
+python -m http.server 8000
+```
+Puis ouvrir http://localhost:8000
 
----
+## Comptes de démonstration
 
-## 👥 Personas & Rôles
+Mot de passe pour tous : `demo1234`
 
-| Rôle | Profil / Persona | Objectifs | Contraintes & Enjeux |
-| :--- | :--- | :--- | :--- |
-| **Citoyen** | *Ex. Thomas, 35 ans*<br>Mobile-first, méfiant vis-à-vis des promesses politiques. | Proposer des projets de loi, débattre, voter pour/contre. | Craint la fuite de données privées et le manque d'écoute. Veut un usage fluide et direct. |
-| **Modérateur** | *Équipe de modération*<br>Utilisation Web / Desktop, volume de signalements important. | Maintenir un espace respectueux, catégoriser, traiter les signalements. | Doit rester impartial (ne pas censurer selon ses opinions), motiver chaque décision d'action. |
-| **Responsable Institutionnel** | *Claire, 48 ans*<br>Chargée de mission en ministère fictif, peu de temps. | Repérer les propositions à fort impact (> 500 votes) et apporter une réponse officielle argumentée. | Compétences informatiques standards, besoin de synthèses claires et fiables (détection d'anomalies de vote). |
+| Rôle | Adresse |
+| --- | --- |
+| Citoyen | citoyen@agora.demo |
+| Modérateur | moderateur@agora.demo |
+| Responsable institutionnel | institution@agora.demo |
 
----
+Une fois connecté, le menu **« Mode démo »** du header permet de passer d'un rôle à l'autre.
+Le bouton **« Réinitialiser la démonstration »** (page Mon compte) remet les données d'origine.
 
-## 🧭 Parcours Utilisateurs Clés
+## Scénario de démonstration (soutenance)
 
-1. **Parcours Citoyen :** Découverte de la plateforme $\rightarrow$ Dépôt d'une proposition avec impact $\rightarrow$ Consultation et vote sur d'autres propositions $\rightarrow$ Suivi de ses contributions.
-2. **Parcours Modérateur :** Notification de signalement $\rightarrow$ Analyse du contenu contesté $\rightarrow$ Décision d'action (validation, masquage, demande d'édition) avec motif public obligatoire.
-3. **Parcours Institutionnel :** Accès au tableau de bord $\rightarrow$ Filtrage par seuil de votes $\rightarrow$ Fiche d'examen et analyse des arguments $\rightarrow$ Publication de la réponse officielle publique.
+1. **Citoyen** : accueil → filtrer par région → ouvrir une proposition → donner un avis → écrire un message → « Créer une loi » (statut Soumise).
+2. **Modérateur** : « Alertes » → accepter la proposition créée, refuser « SUPPRIMER TOUTES LES TAXES… » avec justification, masquer le message injurieux signalé → « Comptes » → accepter la mairie, refuser l'association.
+3. **Responsable institutionnel** : ouvrir une proposition → « Modifier » → rédiger la description officielle, publier une réponse, passer en « Clôturée ».
+4. Retour **citoyen** : « Mon compte » montre le statut et la réponse ; la page « Règles » affiche le journal public de modération.
 
----
+## Publier sur GitHub Pages
 
-## 🖥️ Architecture des Vues & Fonctionnalités
+1. Créer un dépôt GitHub (ex. `agora`) et y envoyer le **contenu** du dossier (`index.html` doit être à la racine du dépôt).
+2. Dépôt → **Settings** → **Pages**.
+3. Source : **Deploy from a branch**, branche `main`, dossier `/ (root)` → **Save**.
+4. Attendre 1 à 2 minutes : le site est disponible à `https://<pseudo>.github.io/agora/`.
 
-Le prototype est conçu autour de 8 à 9 vues clés interconnectées :
+## Arborescence
 
-1. **Accueil / Explorer :** Recherche, tri par popularité/date et filtres thématiques.
-2. **Fiche Proposition :** Contexte, arguments pour/contre, votes, bouton de signalement et réponse institutionnelle.
-3. **Dépôt d'une proposition :** Formulaire par étapes (titre, contexte, description, impact) avec aperçu avant publication.
-4. **Mes Contributions :** Tableau de bord personnel du citoyen permettant de suivre l'avancée et les retours officiels.
-5. **File de Modération :** File d'attente priorisée par motif et gravité des signalements.
-6. **Détail Signalement :** Interface de décision du modérateur avec saisie obligatoire d'une justification.
-7. **Tableau de Bord Institutionnel :** Statistiques globales, métriques d'adhésion, indicateurs de volume et filtres.
-8. **Fiche d'Examen & Clôture :** Synthèse équilibrée des arguments, indicateurs d'anomalies de vote et saisie de la décision officielle.
-9. **Règles & Transparence (ou Modale / Footer) :** Charte éthique, explications du calcul des votes et limites du service.
+```
+index.html             Connexion (authentification simulée)
+inscription.html       Création de compte
+accueil.html           Liste des propositions, recherche et filtres
+loi.html?id=…          Fiche : titre, description, avis, débat
+creer-loi.html         Formulaire de proposition
+compte.html            Données personnelles, mes propositions, demande institutionnelle
+moderation-lois.html   Alertes : propositions soumises et messages signalés
+moderation-comptes.html Demandes de comptes institutionnels
+regles.html            Règles, transparence et journal public
+css/style.css          Styles (variables dans :root)
+js/app.js              Commun : données, session, header, utilitaires
+js/<page>.js           Un script par page
+data/lois.json         12 propositions fictives
+data/users.json        Comptes fictifs
+```
 
-*Un sélecteur de rôle en en-tête permet de basculer instantanément entre Citoyen, Modérateur et Institutionnel lors de la démonstration.*
+## Limites connues (à expliquer à l'oral)
 
----
+- Authentification simulée : mots de passe stockés en clair dans le navigateur.
+- Données locales au navigateur : deux ordinateurs ne voient pas les mêmes avis.
+- Pas de détection réelle des manipulations (comptes multiples).
+- Les photos sont réduites et stockées dans localStorage (quelques Mo maximum au total).
 
-## ⚖️ Éthique, Confiance & Protection des Données
+## Outils utilisés
 
-* **Avertissement Permanent :** Affichage d'un bandeau rappelant le caractère consultatif et non contraignant de la consultation.
-* **Représentativité :** Mention explicite du volume brut de votants à côté des pourcentages (*"résultats non représentatifs de l'ensemble de la population"*).
-* **Protection de l'Opinion :** Vote secret, pseudonymat par défaut et agrégation des données (aucun vote individuel n'est accessible côté institutionnel).
-* **Anti-Manipulation :** Règles d'un vote unique par profil local et indicateurs d'activité suspecte (ex. pics anormaux de votes récents).
-* **Transparence Décisionnelle :** Motifs de modération consultables et obligation d'une réponse officielle pour clôturer une proposition.
-
----
-
-## 🛠️ Choix Techniques
-
-* **Langages :** HTML5, CSS3 vanilla (responsive & accessible), JavaScript moderne (ES6+).
-* **Persistance & Données :** `localStorage` (stockage local client) et fichier initial `propositions.json`.
-* **Hébergement :** GitHub Pages (URL accessible directement, autonome et sans dépendances serveur).
-
----
-
-## 📅 Organisation & Planning (5 Séances)
-
-### Répartition de l'Équipe
-* **Membre A (UX & Doc) :** Cadrage, personas, parcours, protocole de tests utilisateurs, support de présentation.
-* **Membre B (Front Citoyen) :** Vues Explorer, Dépôt, Fiche proposition, Vote et suivi.
-* **Membre C (Front Modération / Institution & Technique) :** Espaces Modérateur et Institutionnel, schémas de données JSON, accessibilité (a11y) et responsive design.
-
-### Calendrier
-* **Avant S2 :** Initialisation du dépôt Git, structure de base et mini-entretiens citoyens.
-* **S2 (Cadrage & UX) :** Validation de la note de cadrage, formalisation des 3 personas et wireframes.
-* **S3 (Prototype V1) :** Intégration HTML/CSS/JS, injection du jeu de données JSON et liaison des parcours de bout en bout.
-* **S4 (Tests Utilisateurs & Accessibilité) :** Tests sur 3 à 5 profils extérieurs, application de 2 corrections clés, audit accessibilité (clavier, contrastes, balises).
-* **S5 (Soutenance - 20 min) :** Présentation du problème (3 min), démonstration scénarisée (7 min), retour sur les tests (3 min), limites & éthique (2 min), échanges Q/R (5 min).
-
----
-
+Code généré avec l'aide d'un LLM (Claude) à partir du cahier des charges et du diagramme des parcours du groupe, puis relu et testé par le groupe.

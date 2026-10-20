@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demandes de comptes — AGORA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+  <header id="app-header"></header>
+
+  <main id="contenu" tabindex="-1">
+    <div class="conteneur conteneur-etroit">
+      <h1>Demandes de comptes institutionnels</h1>
+      <p class="aide">Vérifiez que la personne représente bien une institution publique (mairie, région, ministère…). Une association ou une entreprise n’est pas une institution. La justification est transmise au demandeur. Simulation : aucune vérification réelle n’est effectuée.</p>
+
+      <section aria-labelledby="titre-attente">
+        <h2 id="titre-attente" tabindex="-1">En attente <span class="aide" id="nb-attente"></span></h2>
+        <div id="liste-attente"></div>
+      </section>
+
+      <section class="carte" aria-labelledby="titre-traitees">
+        <h2 id="titre-traitees">Demandes traitées</h2>
+        <div id="liste-traitees"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="app-footer"></footer>
+  <div id="annonce" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/moderation-comptes.js"></script>
+</body>
+</html>

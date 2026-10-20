@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Propositions citoyennes — AGORA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+  <header id="app-header"></header>
+
+  <main id="contenu" tabindex="-1">
+    <div class="conteneur">
+      <div id="message-bienvenue"></div>
+
+      <section class="hero">
+        <div>
+          <h1>Les propositions citoyennes</h1>
+          <p>Découvrez les idées des citoyens, donnez votre avis et débattez.</p>
+        </div>
+        <a href="creer-loi.html" class="btn btn-accent">
+          <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Créer une loi
+        </a>
+      </section>
+
+      <section class="carte filtres" aria-labelledby="titre-filtres">
+        <h2 id="titre-filtres" class="sr-only">Rechercher et filtrer les propositions</h2>
+        <form id="form-filtres" role="search">
+          <div class="grille-filtres">
+            <div class="champ">
+              <label for="recherche">Rechercher</label>
+              <input type="search" id="recherche" placeholder="Mot-clé : transport, école…">
+            </div>
+            <div class="champ">
+              <label for="filtre-region">Région</label>
+              <select id="filtre-region"></select>
+            </div>
+            <div class="champ">
+              <label for="filtre-departement">Département</label>
+              <select id="filtre-departement"></select>
+            </div>
+            <div class="champ">
+              <label for="filtre-statut">Statut</label>
+              <select id="filtre-statut">
+                <option value="">Tous les statuts</option>
+                <option value="en-discussion">En discussion</option>
+                <option value="examinee">Examinée</option>
+                <option value="cloturee">Clôturée</option>
+              </select>
+            </div>
+            <div class="champ">
+              <label for="tri">Trier par</label>
+              <select id="tri">
+                <option value="popularite">Plus d’avis favorables</option>
+                <option value="recent">Plus récentes</option>
+                <option value="debat">Plus débattues</option>
+                <option value="participation">Plus de participants</option>
+              </select>
+            </div>
+          </div>
+          <button type="reset" class="btn btn-discret">Réinitialiser les filtres</button>
+        </form>
+      </section>
+
+      <p id="nb-resultats" class="nb-resultats" aria-live="polite"></p>
+      <div id="liste-lois" class="grille-lois"></div>
+    </div>
+  </main>
+
+  <footer id="app-footer"></footer>
+  <div id="annonce" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/accueil.js"></script>
+</body>
+</html>
