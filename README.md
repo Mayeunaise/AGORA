@@ -89,9 +89,3 @@ Le prototype est conçu autour de 8 à 9 vues clés interconnectées :
 
 ---
 
-## 🤖 Journal d'Usage de l'IA (Transparence Académique)
-
-| Date | Outil Utilisé | Tâche Réalisée | Ajustement Humain Apporté |
-| :--- | :--- | :--- | :--- |
-| *Ex. S1* | *LLM* | *Génération du squelette initial du README* | *Réécriture pour intégrer les contraintes de notation du projet* |
-| *Ex. S3* | *Assistant IA* | *Génération du jeu de données JSON fictif* | *Ajustement des thématiques et du réalisme des propositions* |
