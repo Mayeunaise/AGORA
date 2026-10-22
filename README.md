@@ -21,6 +21,10 @@ python -m http.server 8000
 ```
 Puis ouvrir http://localhost:8000
 
+**Option 3 : Sur internet**
+
+Se rendre à l'adresse suivante : https://mayeunaise.github.io/AGORA/
+
 ## Comptes de démonstration
 
 Mot de passe pour tous : `demo1234`
