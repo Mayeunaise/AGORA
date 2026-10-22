@@ -485,6 +485,18 @@ fieldset { border: none; padding: 0; margin: 0 0 1rem; }
 .nb-resultats { font-weight: 600; color: var(--texte-doux); margin: 0 0 0.75rem; }
 
 .grille-lois { display: grid; gap: 1rem; }
+.liste-groupes { display: flex; flex-direction: column; gap: 2rem; }
+.groupe-lois-entete { margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--bordure); }
+.groupe-lois-entete h2 { display: flex; align-items: center; gap: 0.5rem; margin: 0; }
+.groupe-lois-entete .aide { margin: 0.2rem 0 0; }
+.groupe-lois-nb {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--bleu);
+  background: var(--bleu-clair);
+  border-radius: 999px;
+  padding: 0.05rem 0.55rem;
+}
 
 .carte-loi {
   position: relative;
@@ -510,11 +522,11 @@ fieldset { border: none; padding: 0; margin: 0 0 1rem; }
 .carte-loi-visuel img { width: 100%; height: 120px; object-fit: cover; }
 .carte-loi-corps { padding: 1rem; display: flex; flex-direction: column; gap: 0.55rem; flex: 1; }
 .carte-loi-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
-.carte-loi h2 { font-size: 1.05rem; margin: 0; }
-.carte-loi h2 a { color: var(--bleu-fonce); text-decoration: none; }
+.carte-loi h3 { font-size: 1.05rem; margin: 0; }
+.carte-loi h3 a { color: var(--bleu-fonce); text-decoration: none; }
 /* Le lien couvre toute la carte (clic sur la carte entière) */
-.carte-loi h2 a::after { content: ""; position: absolute; inset: 0; }
-.carte-loi h2 a:focus-visible { outline: none; }
+.carte-loi h3 a::after { content: ""; position: absolute; inset: 0; }
+.carte-loi h3 a:focus-visible { outline: none; }
 .lieu { display: inline-flex; gap: 0.3rem; align-items: center; color: var(--texte-doux); font-size: 0.85rem; }
 .carte-loi-pied { margin-top: auto; display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.86rem; color: var(--texte-doux); }
 

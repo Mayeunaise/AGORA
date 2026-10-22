@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="carte-loi-visuel">${visuel}</div>
         <div class="carte-loi-corps">
           <div class="carte-loi-meta">${AGORA.badgeStatut(loi.statut)}<span class="etiquette">${AGORA.esc(loi.theme)}</span></div>
-          <h2><a href="loi.html?id=${encodeURIComponent(loi.id)}">${AGORA.esc(loi.titre)}</a></h2>
+          <h3><a href="loi.html?id=${encodeURIComponent(loi.id)}">${AGORA.esc(loi.titre)}</a></h3>
           <span class="lieu">${AGORA.icone('epingle')}${AGORA.esc(AGORA.lieu(loi))}</span>
           <div class="carte-loi-pied">
             <div class="barre-avis" aria-hidden="true">
@@ -86,8 +86,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       ? `${lois.length} proposition${lois.length > 1 ? 's' : ''} trouvée${lois.length > 1 ? 's' : ''}`
       : 'Aucune proposition ne correspond à vos critères.';
 
-    liste.innerHTML = lois.length
-      ? lois.map(carteLoi).join('')
+    // Une section par statut, dans l'ordre du parcours d'une loi
+    const sections = ['en-discussion', 'examinee', 'cloturee']
+      .map(s => ({ statut: s, lois: lois.filter(l => l.statut === s) }))
+      .filter(g => g.lois.length)
+      .map(g => `
+        <section class="groupe-lois" aria-labelledby="titre-${g.statut}">
+          <div class="groupe-lois-entete">
+            <h2 id="titre-${g.statut}">${AGORA.esc(AGORA.STATUTS[g.statut].label)}
+              <span class="groupe-lois-nb">${g.lois.length}</span></h2>
+            <p class="aide">${AGORA.esc(AGORA.STATUTS[g.statut].aide)}</p>
+          </div>
+          <div class="grille-lois">${g.lois.map(carteLoi).join('')}</div>
+        </section>`);
+
+    liste.innerHTML = sections.length
+      ? sections.join('')
       : `<div class="carte vide"><p>Essayez un autre mot-clé ou élargissez la zone géographique.</p>
          <p>Votre idée n’existe pas encore ? <a href="creer-loi.html">Proposez-la</a>.</p></div>`;
   }
