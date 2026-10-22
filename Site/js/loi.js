@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <header class="carte entete-loi">
         <div class="meta-haut">
           ${A.badgeStatut(loi.statut)}
-          <span class="etiquette">${A.esc(loi.theme)}</span>
+          ${A.etiquettesThemes(loi)}
           <span class="lieu">${A.icone('epingle')}${A.esc(A.lieu(loi))}</span>
         </div>
         <h1>${A.esc(loi.titre)}</h1>
@@ -75,6 +75,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       <section class="carte reponse-officielle" aria-labelledby="titre-reponse">
         <p class="badge-officiel">${A.icone('check')}Réponse officielle</p>
         <h2 id="titre-reponse">Réponse de l’institution</h2>
+        ${loi.statut === 'adoptee' && loi.dateAdoption
+          ? `<p>${A.badgeStatut('adoptee')} Mise en place le <strong>${A.formatDate(loi.dateAdoption)}</strong>.</p>` : ''}
         <div class="texte-loi">${A.paragraphes(r.texte)}</div>
         <p class="aide">${A.esc(r.auteur)} · ${A.formatDate(r.date)}</p>
       </section>`;
@@ -103,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="champ">
             <label for="reponse-officielle">Réponse officielle</label>
             <textarea id="reponse-officielle" rows="5" aria-describedby="reponse-aide">${A.esc(r ? r.texte : '')}</textarea>
-            <p id="reponse-aide" class="aide">Affichée en évidence avec le badge « Réponse officielle ». Obligatoire pour clôturer.</p>
+            <p id="reponse-aide" class="aide">Affichée en évidence avec le badge « Réponse officielle ». Obligatoire pour clôturer ou adopter : précisez ce qui a été mis en place.</p>
           </div>
           <div class="champ">
             <label for="nouveau-statut">Statut</label>
@@ -122,7 +124,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   function blocAvis(loi) {
     const p = A.pourcentages(loi);
     const monAvis = A.getAvis(user.id, loi.id);
-    const ouvert = loi.statut === 'en-discussion';
+    const modeModo = A.estModeModeration(user);
+    const ouvert = loi.statut === 'en-discussion' && !modeModo;
     const libelleMonAvis = monAvis === 'pour' ? 'favorable' : 'défavorable';
     return `
       <section class="carte" aria-labelledby="titre-avis">
@@ -142,7 +145,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         <p class="resultat-avis"><strong>${p.pour} % favorables</strong> · ${p.contre} % défavorables · sur <strong>${A.formatNombre(p.total)} participants</strong></p>
         <p class="aide">Ces chiffres reflètent uniquement les personnes qui ont participé : ils ne sont pas représentatifs de l’ensemble de la population. Un seul avis par compte.</p>
         ${monAvis ? `<p>Votre avis : <strong>${libelleMonAvis}</strong>. Cliquez sur l’autre bouton pour le changer, ou à nouveau sur le même pour le retirer.</p>` : ''}
-        ${ouvert ? '' : `<p class="alerte alerte-info">${A.icone('cadenas')}<span>Les avis sont fermés : statut « ${A.STATUTS[loi.statut].label} ».</span></p>`}
+        ${ouvert ? '' : `<p class="alerte alerte-info">${A.icone('cadenas')}<span>${modeModo
+          ? 'Mode modération : pour rester neutre, vous ne donnez pas d’avis. Passez en mode citoyen pour le faire.'
+          : `Les avis sont fermés : statut « ${A.STATUTS[loi.statut].label} ».`}</span></p>`}
       </section>`;
   }
 
@@ -174,7 +179,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         <h2 id="titre-debat" tabindex="-1">${A.icone('bulle')} Débat <span class="aide">(${nb} message${nb > 1 ? 's' : ''})</span></h2>
         ${nb ? `<ul class="liste-messages">${loi.messages.map(m => itemMessage(m, loi)).join('')}</ul>`
              : '<p class="vide">Aucun message pour l’instant. Lancez le débat !</p>'}
-        ${debatOuvert(loi) ? `
+        ${debatOuvert(loi) && A.estModeModeration(user) ? `<p class="alerte alerte-info">${A.icone('bouclier')}<span>Mode modération : pour rester neutre, vous ne participez pas au débat. Passez en mode citoyen pour écrire un message.</span></p>` : ''}
+        ${debatOuvert(loi) && !A.estModeModeration(user) ? `
           <form id="form-message" novalidate>
             <div class="champ">
               <label for="message-texte">Votre message</label>
@@ -184,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
             <button type="submit" class="btn btn-primaire">${A.icone('bulle')}Publier</button>
           </form>`
-          : `<p class="alerte alerte-info">${A.icone('cadenas')}<span>Le débat est fermé pour cette proposition.</span></p>`}
+          : debatOuvert(loi) ? '' : `<p class="alerte alerte-info">${A.icone('cadenas')}<span>Le débat est fermé pour cette proposition.</span></p>`}
       </section>`;
   }
 
@@ -295,7 +301,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const reponse = formInstitution.querySelector('#reponse-officielle');
         const statut = formInstitution.querySelector('#nouveau-statut');
         const ok = A.valider([
-          { champ: reponse, test: v => statut.value !== 'cloturee' || v.length >= 20, message: 'Pour clôturer, rédigez une réponse officielle (20 caractères minimum) : le citoyen doit savoir ce que devient sa proposition.' }
+          { champ: reponse, test: v => !['cloturee', 'adoptee'].includes(statut.value) || v.length >= 20, message: 'Pour clôturer ou adopter, rédigez une réponse officielle (20 caractères minimum) : le citoyen doit savoir ce que devient sa proposition.' }
         ]);
         if (!ok) return;
 
@@ -312,6 +318,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           };
         }
         loiAJour.statut = statut.value;
+        // Date de mise en place : fixée au passage en « Adoptée », effacée si on revient en arrière
+        if (statut.value === 'adoptee') loiAJour.dateAdoption = loiAJour.dateAdoption || new Date().toISOString();
+        else loiAJour.dateAdoption = null;
         A.saveLoi(loiAJour);
         if (ancienStatut !== statut.value) {
           A.ajouterJournal({

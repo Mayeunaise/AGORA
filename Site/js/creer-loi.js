@@ -1,7 +1,7 @@
 /* =========================================================
    AGORA — js/creer-loi.js
    Formulaire de proposition : titre, photo (aperçu), description,
-   thème, portée (nationale ou locale : région / département). La loi créée est « soumise »
+   thèmes (1 à 3), portée (nationale ou locale : région / département). La loi créée est « soumise »
    et attend la validation d'un modérateur.
    ========================================================= */
 'use strict';
@@ -12,6 +12,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const A = AGORA;
   const $ = id => document.getElementById(id);
+
+  // Neutralité : un modérateur doit repasser en mode citoyen pour proposer une loi
+  if (A.estModeModeration(user)) {
+    $('zone-creation').innerHTML = `
+      <div class="carte vide">
+        ${A.icone('bouclier')}
+        <h1>Passez en mode citoyen pour proposer une loi</h1>
+        <p>En mode modération, vous ne pouvez pas déposer de proposition : vous seriez juge et partie. En mode citoyen, vous proposez comme tout le monde, et un autre modérateur valide votre texte.</p>
+        <button type="button" class="btn btn-primaire" id="passer-citoyen">${A.icone('echange')}Passer en mode citoyen</button>
+      </div>`;
+    $('passer-citoyen').addEventListener('click', () => { A.basculerMode(); location.reload(); });
+    return;
+  }
+
   const form = $('form-loi');
   const titre = $('titre');
   const description = $('description');
@@ -21,8 +35,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   let photoDataUrl = '';
 
   $('pseudo-affiche').textContent = `« ${A.pseudo(user)} »`;
-  $('theme').innerHTML = '<option value="">Choisissez un thème</option>' +
-    A.THEMES.map(t => `<option value="${A.esc(t)}">${A.esc(t)}</option>`).join('');
+  /* --- Thèmes : cases à cocher colorées, 3 au maximum, dans l'ordre du choix --- */
+  const choixThemes = $('choix-themes');
+  choixThemes.innerHTML = A.THEMES.map((t, i) => `
+    <label class="puce-theme" style="${A.styleTheme(t)}">
+      <input type="checkbox" name="themes" id="theme-${i}" value="${A.esc(t)}">
+      ${A.icone('check', 'coche')}${A.icone(A.ICONE_THEME[t] || 'agora')}${A.esc(t)}
+    </label>`).join('');
+  const casesThemes = [...choixThemes.querySelectorAll('input')];
+  let ordreThemes = [];
+  choixThemes.addEventListener('change', e => {
+    const caseCochee = e.target;
+    ordreThemes = caseCochee.checked
+      ? [...ordreThemes, caseCochee.value]
+      : ordreThemes.filter(t => t !== caseCochee.value);
+    const plein = ordreThemes.length >= A.MAX_THEMES;
+    casesThemes.forEach(c => { c.disabled = plein && !c.checked; });
+    if (ordreThemes.length) A.effacerErreur(casesThemes[0]);
+    if (plein) A.annoncer(`${A.MAX_THEMES} thèmes choisis : c’est le maximum.`);
+  });
   A.lierRegionDepartement($('region'), $('departement'), {
     optionVideRegion: 'Choisissez une région',
     optionVideDept: 'Choisissez un département'
@@ -104,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const regles = [
       { champ: titre, test: v => v.length >= 10, message: 'Le titre doit contenir au moins 10 caractères.' },
       { champ: description, test: v => v.length >= 80, message: `Décrivez davantage votre idée : 80 caractères minimum (actuellement ${description.value.trim().length}).` },
-      { champ: $('theme'), test: v => v.length > 0, message: 'Choisissez un thème.' }
+      { champ: casesThemes[0], test: () => ordreThemes.length > 0, message: 'Choisissez au moins un thème.' }
     ];
     if (!nationale) regles.push(
       { champ: $('region'), test: v => v.length > 0, message: 'Choisissez la région concernée.' },
@@ -116,8 +147,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loi = {
       id: A.genererId('L'),
       titre: titre.value.trim(),
-      theme: $('theme').value,
+      themes: ordreThemes,
       portee: nationale ? 'nationale' : 'locale',
+      dateAdoption: null,
       region: nationale ? '' : $('region').value,
       departement: nationale ? '' : $('departement').value,
       description: description.value.trim(),

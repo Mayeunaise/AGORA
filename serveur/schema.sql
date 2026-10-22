@@ -33,19 +33,27 @@ CREATE TABLE demandes_institution (
 CREATE TABLE lois (
   id                     TEXT PRIMARY KEY,
   titre                  TEXT NOT NULL,
-  theme                  TEXT NOT NULL,
   portee                 TEXT NOT NULL DEFAULT 'locale' CHECK (portee IN ('locale', 'nationale')),
   region                 TEXT NOT NULL DEFAULT '',
   departement            TEXT NOT NULL DEFAULT '',
   description            TEXT NOT NULL,
   description_officielle TEXT NOT NULL DEFAULT '',
   photo                  TEXT NOT NULL DEFAULT '',  -- image en data URL
-  statut                 TEXT NOT NULL CHECK (statut IN ('soumise', 'en-discussion', 'examinee', 'cloturee', 'refusee')),
+  statut                 TEXT NOT NULL CHECK (statut IN ('soumise', 'en-discussion', 'examinee', 'cloturee', 'adoptee', 'refusee')),
   auteur_id              TEXT NOT NULL,
   auteur_pseudo          TEXT NOT NULL,
   date_creation          TEXT NOT NULL,
   pour                   INTEGER NOT NULL DEFAULT 0 CHECK (pour >= 0),
-  contre                 INTEGER NOT NULL DEFAULT 0 CHECK (contre >= 0)
+  contre                 INTEGER NOT NULL DEFAULT 0 CHECK (contre >= 0),
+  date_adoption          TEXT  -- date de mise en place (statut « adoptee »)
+);
+
+-- Thèmes d'une loi (1 à 3) ; rang 0 = thème principal (icône)
+CREATE TABLE lois_themes (
+  loi_id TEXT NOT NULL REFERENCES lois (id) ON DELETE CASCADE,
+  theme  TEXT NOT NULL,
+  rang   INTEGER NOT NULL,
+  PRIMARY KEY (loi_id, theme)
 );
 
 -- Réponse publiée par l'institution (0 ou 1 par loi)

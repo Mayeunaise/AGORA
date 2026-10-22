@@ -2,7 +2,10 @@
   {
     "id": "L001",
     "titre": "Gratuité des transports en commun pour les moins de 18 ans",
-    "theme": "Transport",
+    "themes": [
+      "Transport",
+      "Éducation"
+    ],
     "region": "Auvergne-Rhône-Alpes",
     "departement": "Loire",
     "description": "Je propose que les bus, tramways et TER soient gratuits pour tous les jeunes de moins de 18 ans.\n\nBeaucoup de familles renoncent aux activités sportives ou culturelles à cause du coût des trajets. La gratuité favoriserait aussi l'habitude de prendre les transports en commun plutôt que la voiture.",
@@ -15,17 +18,51 @@
     "pour": 1284,
     "contre": 412,
     "reponseOfficielle": null,
-    "moderation": { "decision": "acceptee", "justification": "Proposition claire et conforme aux règles.", "date": "2026-09-18T15:02:00", "moderateur": "Yanis B." },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition claire et conforme aux règles.",
+      "date": "2026-09-18T15:02:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M001", "auteurId": "u5", "auteur": "Inès M.", "date": "2026-09-19T10:12:00", "texte": "Excellente idée. À Saint-Étienne, mon petit frère fait 40 minutes de marche pour aller au club de foot parce que l'abonnement coûte trop cher.", "signalement": null, "moderation": null },
-      { "id": "M002", "auteurId": "x1", "auteur": "Marc T.", "date": "2026-09-20T18:40:00", "texte": "Rien n'est gratuit : qui paie ? Si ce sont les impôts locaux, il faut le dire clairement dans la proposition.", "signalement": null, "moderation": null },
-      { "id": "M003", "auteurId": "x2", "auteur": "Sophie R.", "date": "2026-09-22T07:55:00", "texte": "Plusieurs villes l'ont déjà fait pour tout le monde. On pourrait commencer par les moins de 18 ans et mesurer l'effet sur la fréquentation.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M001",
+        "auteurId": "u5",
+        "auteur": "Inès M.",
+        "date": "2026-09-19T10:12:00",
+        "texte": "Excellente idée. À Saint-Étienne, mon petit frère fait 40 minutes de marche pour aller au club de foot parce que l'abonnement coûte trop cher.",
+        "signalement": null,
+        "moderation": null
+      },
+      {
+        "id": "M002",
+        "auteurId": "x1",
+        "auteur": "Marc T.",
+        "date": "2026-09-20T18:40:00",
+        "texte": "Rien n'est gratuit : qui paie ? Si ce sont les impôts locaux, il faut le dire clairement dans la proposition.",
+        "signalement": null,
+        "moderation": null
+      },
+      {
+        "id": "M003",
+        "auteurId": "x2",
+        "auteur": "Sophie R.",
+        "date": "2026-09-22T07:55:00",
+        "texte": "Plusieurs villes l'ont déjà fait pour tout le monde. On pourrait commencer par les moins de 18 ans et mesurer l'effet sur la fréquentation.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L002",
     "titre": "Interdire les vols intérieurs quand le train fait le trajet en moins de 4 h",
-    "theme": "Environnement",
+    "themes": [
+      "Environnement",
+      "Transport"
+    ],
     "region": "Île-de-France",
     "departement": "Paris",
     "description": "Quand un trajet est possible en train en moins de 4 heures, l'avion ne devrait plus être autorisé. Le train émet beaucoup moins de CO2 et les gares sont en centre-ville.",
@@ -38,17 +75,55 @@
     "pour": 2310,
     "contre": 1875,
     "reponseOfficielle": null,
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme. Sujet sensible : débat surveillé.", "date": "2026-09-05T16:20:00", "moderateur": "Yanis B." },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme. Sujet sensible : débat surveillé.",
+      "date": "2026-09-05T16:20:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M004", "auteurId": "x4", "auteur": "Nadia K.", "date": "2026-09-06T09:30:00", "texte": "D'accord sur le principe, mais il faudrait que les billets de train soient moins chers, sinon on pénalise ceux qui ont peu de moyens.", "signalement": null, "moderation": null },
-      { "id": "M005", "auteurId": "x5", "auteur": "Bruno V.", "date": "2026-09-07T21:14:00", "texte": "Franchement ceux qui soutiennent ça sont des abrutis déconnectés qui ne sortent jamais de Paris.", "signalement": { "motif": "Propos injurieux", "date": "2026-09-08T08:02:00", "par": "x4" }, "moderation": null },
-      { "id": "M006", "auteurId": "x6", "auteur": "Léa F.", "date": "2026-09-09T13:45:00", "texte": "Pour les correspondances internationales depuis les aéroports, il faudrait prévoir une exception, sinon les gens partiront d'aéroports étrangers.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M004",
+        "auteurId": "x4",
+        "auteur": "Nadia K.",
+        "date": "2026-09-06T09:30:00",
+        "texte": "D'accord sur le principe, mais il faudrait que les billets de train soient moins chers, sinon on pénalise ceux qui ont peu de moyens.",
+        "signalement": null,
+        "moderation": null
+      },
+      {
+        "id": "M005",
+        "auteurId": "x5",
+        "auteur": "Bruno V.",
+        "date": "2026-09-07T21:14:00",
+        "texte": "Franchement ceux qui soutiennent ça sont des abrutis déconnectés qui ne sortent jamais de Paris.",
+        "signalement": {
+          "motif": "Propos injurieux",
+          "date": "2026-09-08T08:02:00",
+          "par": "x4"
+        },
+        "moderation": null
+      },
+      {
+        "id": "M006",
+        "auteurId": "x6",
+        "auteur": "Léa F.",
+        "date": "2026-09-09T13:45:00",
+        "texte": "Pour les correspondances internationales depuis les aéroports, il faudrait prévoir une exception, sinon les gens partiront d'aéroports étrangers.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L003",
     "titre": "Une heure d'éducation au numérique par semaine au collège",
-    "theme": "Éducation",
+    "themes": [
+      "Éducation",
+      "Numérique"
+    ],
     "region": "Bretagne",
     "departement": "Ille-et-Vilaine",
     "description": "Les élèves utilisent les réseaux sociaux tous les jours sans savoir repérer une arnaque, une fausse information ou protéger leurs données. Une heure par semaine de la 6e à la 3e permettrait d'apprendre les bons réflexes.",
@@ -61,15 +136,32 @@
     "pour": 980,
     "contre": 120,
     "reponseOfficielle": null,
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme aux règles.", "date": "2026-10-03T09:00:00", "moderateur": "Yanis B." },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-10-03T09:00:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M007", "auteurId": "x8", "auteur": "Amandine C.", "date": "2026-10-03T19:05:00", "texte": "Enseignante en collège : l'idée est bonne mais qui fait cette heure ? Il faudrait former les professeurs avant.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M007",
+        "auteurId": "x8",
+        "auteur": "Amandine C.",
+        "date": "2026-10-03T19:05:00",
+        "texte": "Enseignante en collège : l'idée est bonne mais qui fait cette heure ? Il faudrait former les professeurs avant.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L004",
     "titre": "Une maison de santé dans chaque canton rural",
-    "theme": "Santé",
+    "themes": [
+      "Santé"
+    ],
     "region": "Nouvelle-Aquitaine",
     "departement": "Haute-Vienne",
     "description": "Dans mon canton, il faut 45 minutes pour voir un médecin généraliste. Je propose que chaque canton rural dispose d'au moins une maison de santé avec médecins, infirmiers et kinés.",
@@ -81,17 +173,47 @@
     "dateCreation": "2026-08-28T10:00:00",
     "pour": 1652,
     "contre": 304,
-    "reponseOfficielle": { "texte": "Merci aux 1 956 participants. Le principe est partagé, mais l'obstacle principal n'est pas le bâtiment : c'est le nombre de soignants disponibles.\n\nLa proposition est transmise au groupe de travail sur l'accès aux soins, avec une priorité aux cantons situés à plus de 30 minutes d'un médecin. Un point d'étape sera publié sur cette page.", "auteur": "Claire D., responsable institutionnelle", "date": "2026-10-10T14:00:00" },
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme aux règles.", "date": "2026-08-28T15:30:00", "moderateur": "Yanis B." },
+    "reponseOfficielle": {
+      "texte": "Merci aux 1 956 participants. Le principe est partagé, mais l'obstacle principal n'est pas le bâtiment : c'est le nombre de soignants disponibles.\n\nLa proposition est transmise au groupe de travail sur l'accès aux soins, avec une priorité aux cantons situés à plus de 30 minutes d'un médecin. Un point d'étape sera publié sur cette page.",
+      "auteur": "Claire D., responsable institutionnelle",
+      "date": "2026-10-10T14:00:00"
+    },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-08-28T15:30:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M008", "auteurId": "x10", "auteur": "Fatou S.", "date": "2026-08-30T08:20:00", "texte": "Infirmière libérale ici : les locaux existent parfois déjà, ce sont les médecins qui manquent.", "signalement": null, "moderation": null },
-      { "id": "M009", "auteurId": "x11", "auteur": "Romain B.", "date": "2026-09-02T12:00:00", "texte": "Et la téléconsultation dans ces maisons de santé, avec un infirmier présent ? Ça marche bien chez nous.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M008",
+        "auteurId": "x10",
+        "auteur": "Fatou S.",
+        "date": "2026-08-30T08:20:00",
+        "texte": "Infirmière libérale ici : les locaux existent parfois déjà, ce sont les médecins qui manquent.",
+        "signalement": null,
+        "moderation": null
+      },
+      {
+        "id": "M009",
+        "auteurId": "x11",
+        "auteur": "Romain B.",
+        "date": "2026-09-02T12:00:00",
+        "texte": "Et la téléconsultation dans ces maisons de santé, avec un infirmier présent ? Ça marche bien chez nous.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L005",
     "titre": "Afficher obligatoirement le prix des pièces détachées des appareils électroniques",
-    "theme": "Numérique",
+    "themes": [
+      "Numérique",
+      "Environnement"
+    ],
     "region": "Occitanie",
     "departement": "Haute-Garonne",
     "description": "Avant d'acheter un téléphone ou un ordinateur, on devrait connaître le prix d'un écran ou d'une batterie de remplacement. Cela pousserait les fabricants à rendre leurs produits réparables.",
@@ -104,15 +226,32 @@
     "pour": 744,
     "contre": 98,
     "reponseOfficielle": null,
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme aux règles.", "date": "2026-10-06T14:10:00", "moderateur": "Yanis B." },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-10-06T14:10:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M010", "auteurId": "x13", "auteur": "Kevin A.", "date": "2026-10-07T20:30:00", "texte": "Il existe déjà un indice de réparabilité, mais le prix précis des pièces serait plus parlant.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M010",
+        "auteurId": "x13",
+        "auteur": "Kevin A.",
+        "date": "2026-10-07T20:30:00",
+        "texte": "Il existe déjà un indice de réparabilité, mais le prix précis des pièces serait plus parlant.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L006",
     "titre": "Étendre l'encadrement des loyers aux villes de plus de 50 000 habitants",
-    "theme": "Logement",
+    "themes": [
+      "Logement"
+    ],
     "region": "Provence-Alpes-Côte d'Azur",
     "departement": "Bouches-du-Rhône",
     "description": "Les loyers augmentent plus vite que les salaires. L'encadrement devrait s'appliquer automatiquement à toutes les villes de plus de 50 000 habitants.",
@@ -125,16 +264,43 @@
     "pour": 1120,
     "contre": 980,
     "reponseOfficielle": null,
-    "moderation": { "decision": "modifiee", "justification": "Titre reformulé pour être neutre (« Stop aux propriétaires voleurs » → titre actuel). Le fond de la proposition est inchangé.", "date": "2026-09-25T17:45:00", "moderateur": "Yanis B." },
+    "moderation": {
+      "decision": "modifiee",
+      "justification": "Titre reformulé pour être neutre (« Stop aux propriétaires voleurs » → titre actuel). Le fond de la proposition est inchangé.",
+      "date": "2026-09-25T17:45:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M011", "auteurId": "x15", "auteur": "Olivier M.", "date": "2026-09-26T10:10:00", "texte": "Propriétaire d'un seul appartement : si on encadre trop, certains préféreront vendre ou louer en meublé de tourisme.", "signalement": null, "moderation": null },
-      { "id": "M012", "auteurId": "x16", "auteur": "Clara N.", "date": "2026-09-27T22:05:00", "texte": "Étudiante à Marseille, je paie 600 € pour 18 m². Il faut faire quelque chose.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M011",
+        "auteurId": "x15",
+        "auteur": "Olivier M.",
+        "date": "2026-09-26T10:10:00",
+        "texte": "Propriétaire d'un seul appartement : si on encadre trop, certains préféreront vendre ou louer en meublé de tourisme.",
+        "signalement": null,
+        "moderation": null
+      },
+      {
+        "id": "M012",
+        "auteurId": "x16",
+        "auteur": "Clara N.",
+        "date": "2026-09-27T22:05:00",
+        "texte": "Étudiante à Marseille, je paie 600 € pour 18 m². Il faut faire quelque chose.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L007",
     "titre": "50 % de produits locaux dans les cantines scolaires",
-    "theme": "Agriculture",
+    "themes": [
+      "Agriculture",
+      "Éducation",
+      "Santé"
+    ],
     "region": "Auvergne-Rhône-Alpes",
     "departement": "Haute-Loire",
     "description": "Nos agriculteurs ont du mal à vivre alors que les cantines achètent des produits venus de loin. Imposer 50 % de produits locaux soutiendrait l'agriculture et améliorerait les repas.",
@@ -147,15 +313,32 @@
     "pour": 870,
     "contre": 150,
     "reponseOfficielle": null,
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme aux règles.", "date": "2026-09-10T11:00:00", "moderateur": "Yanis B." },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-09-10T11:00:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M013", "auteurId": "x18", "auteur": "Pierre-Yves L.", "date": "2026-09-11T06:50:00", "texte": "Éleveur en Haute-Loire : on ne demande que ça, mais les appels d'offres favorisent toujours le moins cher.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M013",
+        "auteurId": "x18",
+        "auteur": "Pierre-Yves L.",
+        "date": "2026-09-11T06:50:00",
+        "texte": "Éleveur en Haute-Loire : on ne demande que ça, mais les appels d'offres favorisent toujours le moins cher.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L008",
     "titre": "Élargir le pass Culture aux plus de 65 ans",
-    "theme": "Culture",
+    "themes": [
+      "Culture"
+    ],
     "region": "Hauts-de-France",
     "departement": "Nord",
     "description": "Le pass Culture existe pour les jeunes. Les retraités aux petites pensions sortent aussi très peu. Un pass de 150 € par an les aiderait à aller au cinéma, au théâtre ou au musée.",
@@ -168,34 +351,66 @@
     "pour": 410,
     "contre": 390,
     "reponseOfficielle": null,
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme aux règles.", "date": "2026-10-09T08:40:00", "moderateur": "Yanis B." },
-    "messages": []
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-10-09T08:40:00",
+      "moderateur": "Yanis B."
+    },
+    "messages": [],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L009",
     "titre": "Panneaux solaires obligatoires sur les grands parkings de supermarchés",
-    "theme": "Énergie",
+    "themes": [
+      "Énergie",
+      "Environnement"
+    ],
     "region": "Grand Est",
     "departement": "Bas-Rhin",
     "description": "Les parkings de supermarchés sont d'immenses surfaces vides en plein soleil. Les couvrir de panneaux solaires produirait de l'électricité et ferait de l'ombre aux voitures.",
     "descriptionOfficielle": "La proposition rend obligatoire l'installation d'ombrières photovoltaïques sur les parkings commerciaux de plus de 1 500 m².",
     "photo": "",
-    "statut": "cloturee",
+    "statut": "adoptee",
     "auteurId": "x20",
     "auteurPseudo": "Antoine W.",
     "dateCreation": "2026-08-25T09:00:00",
     "pour": 1530,
     "contre": 420,
-    "reponseOfficielle": { "texte": "Cette mesure existe déjà en partie dans la loi pour les parkings de plus de 1 500 m², avec un calendrier progressif. Votre proposition rejoint donc un dispositif en cours.\n\nNous retenons votre demande d'un meilleur suivi : une carte de l'avancement des installations par département sera étudiée.", "auteur": "Claire D., responsable institutionnelle", "date": "2026-10-01T10:30:00" },
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme aux règles.", "date": "2026-08-25T14:00:00", "moderateur": "Yanis B." },
+    "reponseOfficielle": {
+      "texte": "Cette mesure existe déjà en partie dans la loi pour les parkings de plus de 1 500 m², avec un calendrier progressif. Votre proposition rejoint donc un dispositif en cours.\n\nNous retenons votre demande d'un meilleur suivi : une carte de l'avancement des installations par département sera étudiée.",
+      "auteur": "Claire D., responsable institutionnelle",
+      "date": "2026-10-01T10:30:00"
+    },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-08-25T14:00:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M014", "auteurId": "x21", "auteur": "Élodie S.", "date": "2026-08-27T17:00:00", "texte": "Très bonne idée, et on pourrait y installer des bornes de recharge en même temps.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M014",
+        "auteurId": "x21",
+        "auteur": "Élodie S.",
+        "date": "2026-08-27T17:00:00",
+        "texte": "Très bonne idée, et on pourrait y installer des bornes de recharge en même temps.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": "2026-10-15T09:00:00"
   },
   {
     "id": "L010",
     "titre": "Limiter la vitesse à 30 km/h autour de toutes les écoles",
-    "theme": "Sécurité routière",
+    "themes": [
+      "Sécurité routière",
+      "Éducation"
+    ],
     "region": "Occitanie",
     "departement": "Hérault",
     "description": "Devant l'école de mes enfants, les voitures roulent à 50 km/h aux heures de sortie. Une limite à 30 km/h dans un rayon de 300 m autour des écoles éviterait des accidents.",
@@ -208,15 +423,32 @@
     "pour": 655,
     "contre": 510,
     "reponseOfficielle": null,
-    "moderation": { "decision": "acceptee", "justification": "Proposition conforme aux règles.", "date": "2026-10-11T13:30:00", "moderateur": "Yanis B." },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-10-11T13:30:00",
+      "moderateur": "Yanis B."
+    },
     "messages": [
-      { "id": "M015", "auteurId": "x22", "auteur": "Daniel F.", "date": "2026-10-12T09:00:00", "texte": "Beaucoup de communes le font déjà. Le vrai problème, c'est le contrôle : sans radar ni aménagement, personne ne respecte.", "signalement": null, "moderation": null }
-    ]
+      {
+        "id": "M015",
+        "auteurId": "x22",
+        "auteur": "Daniel F.",
+        "date": "2026-10-12T09:00:00",
+        "texte": "Beaucoup de communes le font déjà. Le vrai problème, c'est le contrôle : sans radar ni aménagement, personne ne respecte.",
+        "signalement": null,
+        "moderation": null
+      }
+    ],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L011",
     "titre": "Créer un service civique pour aider les seniors avec le numérique",
-    "theme": "Numérique",
+    "themes": [
+      "Numérique"
+    ],
     "region": "Bretagne",
     "departement": "Finistère",
     "description": "De plus en plus de démarches se font uniquement en ligne et beaucoup de personnes âgées sont perdues. Des jeunes en service civique pourraient tenir des permanences dans les mairies pour les accompagner.",
@@ -230,12 +462,16 @@
     "contre": 0,
     "reponseOfficielle": null,
     "moderation": null,
-    "messages": []
+    "messages": [],
+    "portee": "locale",
+    "dateAdoption": null
   },
   {
     "id": "L012",
     "titre": "SUPPRIMER TOUTES LES TAXES SUR L'ESSENCE !!!",
-    "theme": "Transport",
+    "themes": [
+      "Transport"
+    ],
     "region": "Grand Est",
     "departement": "Moselle",
     "description": "Ras le bol de payer. Il faut tout supprimer.",
@@ -249,6 +485,151 @@
     "contre": 0,
     "reponseOfficielle": null,
     "moderation": null,
+    "messages": [],
+    "portee": "locale",
+    "dateAdoption": null
+  },
+  {
+    "id": "L013",
+    "titre": "Des fontaines à eau potable dans tous les parcs publics",
+    "themes": [
+      "Santé",
+      "Environnement"
+    ],
+    "portee": "locale",
+    "region": "Auvergne-Rhône-Alpes",
+    "departement": "Loire",
+    "description": "L'été, il est difficile de trouver de l'eau gratuite dans les parcs. Les familles achètent des bouteilles en plastique.\n\nJe propose d'installer au moins une fontaine d'eau potable dans chaque parc public de la ville.",
+    "descriptionOfficielle": "",
+    "photo": "",
+    "statut": "adoptee",
+    "auteurId": "u5",
+    "auteurPseudo": "Inès M.",
+    "dateCreation": "2026-03-14T11:20:00",
+    "pour": 2140,
+    "contre": 186,
+    "reponseOfficielle": {
+      "texte": "Proposition adoptée. 24 fontaines ont été installées dans les parcs de la ville entre juin et août. Un relevé de la fréquentation sera publié à la fin de l'été prochain.",
+      "auteur": "Claire D., responsable institutionnelle",
+      "date": "2026-05-20T10:00:00"
+    },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-03-15T09:10:00",
+      "moderateur": "Yanis B."
+    },
+    "dateAdoption": "2026-06-02T09:00:00",
+    "messages": [
+      {
+        "id": "M101",
+        "auteurId": "u1",
+        "auteur": "Camille M.",
+        "date": "2026-03-16T18:02:00",
+        "texte": "Très bonne idée, et ça réduira les déchets plastiques dans les parcs.",
+        "signalement": null,
+        "moderation": null
+      }
+    ]
+  },
+  {
+    "id": "L014",
+    "titre": "Un abri vélo sécurisé dans chaque gare",
+    "themes": [
+      "Transport",
+      "Environnement"
+    ],
+    "portee": "nationale",
+    "region": "",
+    "departement": "",
+    "description": "Beaucoup de personnes renoncent à aller à la gare à vélo par peur du vol.\n\nJe propose un abri vélo fermé et gratuit pour les abonnés dans chaque gare.",
+    "descriptionOfficielle": "Installer dans chaque gare de voyageurs un abri vélo fermé, accessible gratuitement aux titulaires d'un abonnement de transport.",
+    "photo": "",
+    "statut": "adoptee",
+    "auteurId": "x2",
+    "auteurPseudo": "Sophie R.",
+    "dateCreation": "2026-02-03T08:45:00",
+    "pour": 3420,
+    "contre": 610,
+    "reponseOfficielle": {
+      "texte": "La mesure est intégrée au plan vélo national. Les gares de plus de 1 000 voyageurs par jour sont équipées en priorité ; 312 abris sont déjà ouverts.",
+      "auteur": "Claire D., responsable institutionnelle",
+      "date": "2026-04-28T14:00:00"
+    },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-02-03T16:30:00",
+      "moderateur": "Yanis B."
+    },
+    "dateAdoption": "2026-05-05T09:00:00",
+    "messages": []
+  },
+  {
+    "id": "L015",
+    "titre": "Des menus végétariens au choix chaque jour à la cantine",
+    "themes": [
+      "Éducation",
+      "Agriculture",
+      "Santé"
+    ],
+    "portee": "locale",
+    "region": "Auvergne-Rhône-Alpes",
+    "departement": "Rhône",
+    "description": "Proposer chaque jour une alternative végétarienne dans les cantines scolaires, en plus du menu habituel.",
+    "descriptionOfficielle": "",
+    "photo": "",
+    "statut": "adoptee",
+    "auteurId": "u4",
+    "auteurPseudo": "Hugo L.",
+    "dateCreation": "2026-04-10T13:00:00",
+    "pour": 1580,
+    "contre": 940,
+    "reponseOfficielle": {
+      "texte": "Adoptée à la rentrée de septembre dans les 58 écoles du département. Le choix se fait la veille sur l'espace famille.",
+      "auteur": "Claire D., responsable institutionnelle",
+      "date": "2026-07-08T11:00:00"
+    },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-04-10T17:45:00",
+      "moderateur": "Yanis B."
+    },
+    "dateAdoption": "2026-09-01T08:00:00",
+    "messages": []
+  },
+  {
+    "id": "L016",
+    "titre": "Allonger les horaires des bibliothèques le samedi",
+    "themes": [
+      "Culture",
+      "Éducation"
+    ],
+    "portee": "locale",
+    "region": "Île-de-France",
+    "departement": "Paris",
+    "description": "Les bibliothèques ferment à 17 h le samedi, au moment où les étudiants et les familles sont disponibles. Je propose une fermeture à 20 h.",
+    "descriptionOfficielle": "",
+    "photo": "",
+    "statut": "adoptee",
+    "auteurId": "u1",
+    "auteurPseudo": "Camille M.",
+    "dateCreation": "2026-01-22T19:30:00",
+    "pour": 990,
+    "contre": 145,
+    "reponseOfficielle": {
+      "texte": "Depuis mars, 6 bibliothèques ferment à 20 h le samedi, à titre d'essai pendant un an.",
+      "auteur": "Claire D., responsable institutionnelle",
+      "date": "2026-02-26T09:30:00"
+    },
+    "moderation": {
+      "decision": "acceptee",
+      "justification": "Proposition conforme aux règles.",
+      "date": "2026-01-23T10:00:00",
+      "moderateur": "Yanis B."
+    },
+    "dateAdoption": "2026-03-07T10:00:00",
     "messages": []
   }
 ]

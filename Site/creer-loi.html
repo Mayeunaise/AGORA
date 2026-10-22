@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Créer une loi — AGORA</title>
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -40,10 +40,11 @@
           <p id="description-aide" class="aide">Quel problème voulez-vous résoudre ? Que proposez-vous concrètement ? Pour qui ? (80 caractères minimum)</p>
         </div>
 
-        <div class="champ">
-          <label for="theme">Thème <span class="obligatoire" aria-hidden="true">*</span></label>
-          <select id="theme"></select>
-        </div>
+        <fieldset class="champ" aria-describedby="themes-aide">
+          <legend>Thèmes <span class="obligatoire" aria-hidden="true">*</span></legend>
+          <p id="themes-aide" class="aide">Choisissez de 1 à 3 thèmes. Le premier choisi sert d’illustration.</p>
+          <div class="choix-themes" id="choix-themes"></div>
+        </fieldset>
 
         <fieldset class="champ">
           <legend>Portée de la loi <span class="obligatoire" aria-hidden="true">*</span></legend>
@@ -84,8 +85,8 @@
   <footer id="app-footer"></footer>
   <div id="annonce" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/api-config.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
-  <script src="js/creer-loi.js?v=6"></script>
+  <script src="js/api-config.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
+  <script src="js/creer-loi.js?v=7"></script>
 </body>
 </html>

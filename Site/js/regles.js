@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
 
   const A = AGORA;
+  document.getElementById('btn-presentation').addEventListener('click', A.ouvrirPresentation);
   const journal = A.getJournal();
   const zone = document.getElementById('journal-contenu');
 

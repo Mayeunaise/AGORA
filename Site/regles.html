@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Règles et transparence — AGORA</title>
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -14,6 +14,7 @@
     <div class="conteneur conteneur-etroit">
       <h1>Règles et transparence</h1>
       <p class="aide">Comment fonctionne AGORA, ce que vaut un avis, et comment la modération décide.</p>
+      <p><button type="button" class="btn btn-secondaire" id="btn-presentation">Revoir la présentation d’AGORA</button></p>
 
       <nav class="carte" aria-labelledby="titre-sommaire">
         <h2 id="titre-sommaire">Sommaire</h2>
@@ -21,6 +22,7 @@
           <li><a href="#avis">Un avis consultatif, pas un vote</a></li>
           <li><a href="#parcours">Le parcours d’une proposition</a></li>
           <li><a href="#moderation">Comment fonctionne la modération</a></li>
+          <li><a href="#charte">Charte de modération : obligation de neutralité</a></li>
           <li><a href="#refus">Pourquoi une proposition peut être refusée</a></li>
           <li><a href="#donnees">Vos données</a></li>
           <li><a href="#journal">Journal public de modération</a></li>
@@ -45,6 +47,7 @@
           <li><span class="statut statut-en-discussion"><span class="pastille" aria-hidden="true"></span>En discussion</span> : tout le monde peut donner son avis et débattre.</li>
           <li><span class="statut statut-examinee"><span class="pastille" aria-hidden="true"></span>Examinée</span> : l’institution étudie la proposition ; le débat reste ouvert, les avis sont figés.</li>
           <li><span class="statut statut-cloturee"><span class="pastille" aria-hidden="true"></span>Clôturée</span> : l’institution publie une réponse officielle, obligatoire pour clôturer.</li>
+          <li><span class="statut statut-adoptee"><span class="pastille" aria-hidden="true"></span>Adoptée</span> : l’institution a mis la mesure en place. Elle rejoint la page <a href="lois-adoptees.html">Lois adoptées</a>.</li>
         </ol>
         <p>Une proposition non conforme passe au statut <span class="statut statut-refusee"><span class="pastille" aria-hidden="true"></span>Refusée</span>, avec la justification de la modération.</p>
       </section>
@@ -61,6 +64,21 @@
         </ul>
       </section>
 
+      <section class="carte" id="charte" aria-labelledby="titre-charte">
+        <h2 id="titre-charte">Charte de modération : obligation de neutralité</h2>
+        <p>Chaque modérateur s’engage à respecter cette charte. Il le confirme en cochant une case avant chaque décision.</p>
+        <ol>
+          <li><strong>Juger la forme, jamais le fond.</strong> Une proposition ou un message n’est jamais refusé ni masqué parce que le modérateur n’est pas d’accord avec l’opinion exprimée.</li>
+          <li><strong>Appliquer les mêmes règles à tous</strong>, quel que soit le sujet, le bord politique ou l’auteur.</li>
+          <li><strong>Reformuler sans orienter.</strong> Une modification corrige le ton, l’orthographe ou un titre partial ; elle ne change pas l’idée de l’auteur.</li>
+          <li><strong>Pas de conflit d’intérêts.</strong> Un modérateur ne modère ni ses propres propositions ni ses propres messages, et ne peut pas être responsable institutionnel.</li>
+          <li><strong>Séparer les rôles.</strong> En mode modération, un modérateur ne propose pas de loi. Pour en proposer une, il repasse en mode citoyen, et un autre modérateur la valide.</li>
+          <li><strong>Justifier publiquement.</strong> Chaque décision est expliquée par écrit et publiée dans le journal ci-dessous.</li>
+          <li><strong>Rester discret sur ses opinions.</strong> En mode modération, un modérateur ne donne pas d’avis et ne participe pas au débat. Il le fait en mode citoyen, comme tout le monde.</li>
+        </ol>
+        <p class="aide">Un manquement à la charte peut être signalé à l’équipe de la plateforme. Le modérateur concerné perd alors son rôle.</p>
+      </section>
+
       <section class="carte" id="refus" aria-labelledby="titre-refus">
         <h2 id="titre-refus">Pourquoi une proposition peut être refusée</h2>
         <ul>
@@ -75,7 +93,7 @@
 
       <section class="carte" id="donnees" aria-labelledby="titre-donnees">
         <h2 id="titre-donnees">Vos données</h2>
-        <p><strong>Ce site est un prototype pédagogique.</strong> Toutes les propositions, tous les comptes et tous les chiffres sont fictifs. Rien n’est envoyé sur un serveur : les données restent dans votre navigateur (localStorage) et peuvent être effacées depuis « Mon compte ».</p>
+        <p><strong>Ce site est un prototype pédagogique.</strong> Toutes les propositions, tous les comptes et tous les chiffres sont fictifs. Selon la configuration, les données restent dans votre navigateur (localStorage) ou sont enregistrées sur le serveur de démonstration du projet, dans une base SQLite. Les mots de passe y sont hachés et ne sont jamais affichés.</p>
         <p>L’authentification est simulée : les mots de passe ne sont pas protégés. N’utilisez jamais de vraies informations.</p>
         <p>Dans une version réelle, seules les données nécessaires seraient collectées (principe de minimisation du RGPD), avec une durée de conservation annoncée et un droit de suppression.</p>
       </section>
@@ -91,8 +109,8 @@
   <footer id="app-footer"></footer>
   <div id="annonce" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/api-config.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
-  <script src="js/regles.js?v=6"></script>
+  <script src="js/api-config.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
+  <script src="js/regles.js?v=7"></script>
 </body>
 </html>

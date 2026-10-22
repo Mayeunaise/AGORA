@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Propositions citoyennes — AGORA</title>
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -19,20 +19,33 @@
           <h1>Les propositions citoyennes</h1>
           <p>Découvrez les idées des citoyens, donnez votre avis et débattez.</p>
         </div>
-        <a href="creer-loi.html" class="btn btn-accent">
-          <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Créer une loi
-        </a>
+        <div class="actions">
+          <button type="button" class="btn btn-secondaire" id="btn-presentation">
+            <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Comment ça marche ?
+          </button>
+          <a href="creer-loi.html" class="btn btn-accent" id="btn-creer">
+            <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Créer une loi
+          </a>
+        </div>
       </section>
 
       <section class="carte filtres" aria-labelledby="titre-filtres">
         <h2 id="titre-filtres" class="sr-only">Rechercher et filtrer les propositions</h2>
         <form id="form-filtres" role="search">
+          <div class="recherche-principale">
+            <label for="recherche">Rechercher une proposition</label>
+            <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="search" id="recherche" placeholder="Mot-clé, thème, ville : transport, école, Lyon…" autocomplete="off">
+          </div>
+
+          <fieldset class="filtre-statuts">
+            <legend>Statut <span class="facultatif">(aucun choix = tous)</span></legend>
+            <div class="puces-statut" id="puces-statut"></div>
+          </fieldset>
+
           <div class="grille-filtres">
-            <div class="champ">
-              <label for="recherche">Rechercher</label>
-              <input type="search" id="recherche" placeholder="Mot-clé : transport, école…">
-            </div>
             <div class="champ">
               <label for="filtre-region">Région</label>
               <select id="filtre-region"></select>
@@ -40,15 +53,6 @@
             <div class="champ">
               <label for="filtre-departement">Département</label>
               <select id="filtre-departement"></select>
-            </div>
-            <div class="champ">
-              <label for="filtre-statut">Statut</label>
-              <select id="filtre-statut">
-                <option value="">Tous les statuts</option>
-                <option value="en-discussion">En discussion</option>
-                <option value="examinee">Examinée</option>
-                <option value="cloturee">Clôturée</option>
-              </select>
             </div>
             <div class="champ">
               <label for="tri">Trier par</label>
@@ -66,14 +70,22 @@
 
       <p id="nb-resultats" class="nb-resultats" aria-live="polite"></p>
       <div id="liste-lois" class="liste-groupes"></div>
+
+      <section class="carte lien-adoptees" aria-labelledby="titre-lien-adoptees">
+        <div>
+          <h2 id="titre-lien-adoptees">Lois adoptées</h2>
+          <p id="resume-adoptees" class="aide"></p>
+        </div>
+        <a class="btn btn-secondaire" href="lois-adoptees.html">Voir les lois adoptées et leurs chiffres</a>
+      </section>
     </div>
   </main>
 
   <footer id="app-footer"></footer>
   <div id="annonce" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/api-config.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
-  <script src="js/accueil.js?v=6"></script>
+  <script src="js/api-config.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
+  <script src="js/accueil.js?v=7"></script>
 </body>
 </html>

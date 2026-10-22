@@ -3,7 +3,8 @@
    Interface « Alertes » du modérateur :
    - propositions soumises : accepter, modifier puis accepter, refuser
    - messages signalés : conserver ou masquer
-   Toute décision exige une justification, rendue publique.
+   Toute décision exige une justification, rendue publique,
+   et l'engagement de respecter la charte de neutralité.
    ========================================================= */
 'use strict';
 
@@ -15,19 +16,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   const $ = id => document.getElementById(id);
   const MIN_JUSTIF = 10;
 
+  /** Case obligatoire : engagement de neutralité (charte de modération). */
+  const engagement = i => `
+    <div class="champ engagement-neutralite">
+      <div class="choix">
+        <input type="checkbox" id="neutre-${i}">
+        <label for="neutre-${i}">Je décide sur la forme et le respect des règles, pas selon mon opinion sur le sujet (<a href="regles.html#charte">charte de neutralité</a>).</label>
+      </div>
+    </div>`;
+
+  // Conflit d'intérêts : on ne modère pas ses propres contenus
+  const nonModerable = texte => `<p class="alerte alerte-info">${A.icone('bouclier')}<span>${texte} Un autre modérateur doit prendre la décision, pour garantir la neutralité.</span></p>`;
+
   /* ---------- Propositions soumises ---------- */
   function elementLoi(loi) {
     const i = A.esc(loi.id);
     return `
       <article class="carte element-moderation" aria-labelledby="titre-${i}">
-        <div class="carte-loi-meta">${A.badgeStatut(loi.statut)}<span class="etiquette">${A.esc(loi.theme)}</span>
+        <div class="carte-loi-meta">${A.badgeStatut(loi.statut)}${A.etiquettesThemes(loi)}
           <span class="lieu">${A.icone('epingle')}${A.esc(A.lieu(loi))}</span></div>
         <h3 id="titre-${i}">${A.esc(loi.titre)}</h3>
         <p class="aide">Proposée par ${A.esc(loi.auteurPseudo)} le ${A.formatDate(loi.dateCreation, true)}</p>
         ${loi.photo ? `<img class="photo-loi" src="${loi.photo}" alt="Photo jointe à la proposition « ${A.esc(loi.titre)} »">` : ''}
         <div class="citation texte-loi">${A.paragraphes(loi.description)}</div>
 
-        <form data-loi="${i}" novalidate>
+        ${loi.auteurId === user.id ? nonModerable('Vous êtes l’auteur de cette proposition.') : `<form data-loi="${i}" novalidate>
           <div id="modif-${i}" hidden>
             <p class="alerte alerte-info">${A.icone('crayon')}<span>Corrigez uniquement la forme (titre neutre, orthographe, propos déplacés). Le fond de l’idée doit rester celui de l’auteur.</span></p>
             <div class="champ">
@@ -44,12 +57,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             <textarea id="justif-${i}" rows="3" aria-describedby="justif-aide-${i}"></textarea>
             <p id="justif-aide-${i}" class="aide">Affichée publiquement. Exemple : « Conforme aux règles » ou « Titre reformulé pour rester neutre ».</p>
           </div>
+          ${engagement(i)}
           <div class="actions">
             <button type="submit" value="acceptee" class="btn btn-succes" data-bouton-accepter>${A.icone('check')}<span>Accepter</span></button>
             <button type="button" class="btn btn-secondaire" data-modifier aria-expanded="false" aria-controls="modif-${i}">${A.icone('crayon')}Modifier</button>
             <button type="submit" value="refusee" class="btn btn-danger">${A.icone('croix')}Refuser</button>
           </div>
-        </form>
+        </form>`}
       </article>`;
   }
 
@@ -63,17 +77,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         <h3 id="titre-msg-${i}">Message de ${A.esc(m.auteur)}</h3>
         <p class="aide">Dans le débat : <a href="loi.html?id=${encodeURIComponent(loi.id)}">${A.esc(loi.titre)}</a> · publié le ${A.formatDate(m.date, true)}</p>
         <blockquote class="citation">${A.esc(m.texte)}</blockquote>
-        <form data-message="${i}" data-loi-du-message="${A.esc(loi.id)}" novalidate>
+        ${m.auteurId === user.id ? nonModerable('Il s’agit de votre propre message.') : `<form data-message="${i}" data-loi-du-message="${A.esc(loi.id)}" novalidate>
           <div class="champ">
             <label for="justif-${i}">Justification de la décision <span class="obligatoire" aria-hidden="true">*</span></label>
             <textarea id="justif-${i}" rows="3" aria-describedby="justif-aide-${i}"></textarea>
             <p id="justif-aide-${i}" class="aide">Si le message est masqué, cette justification remplace son contenu dans le débat.</p>
           </div>
+          ${engagement(i)}
           <div class="actions">
             <button type="submit" value="conserve" class="btn btn-succes">${A.icone('check')}Conserver le message</button>
             <button type="submit" value="masque" class="btn btn-danger">${A.icone('oeil')}Masquer le message</button>
           </div>
-        </form>
+        </form>`}
       </article>`;
   }
 
@@ -119,7 +134,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const idCible = form.dataset.loi || form.dataset.message;
     const justif = form.querySelector(`#justif-${CSS.escape(idCible)}`);
 
-    const regles = [{ champ: justif, test: v => v.length >= MIN_JUSTIF, message: `La justification est obligatoire (${MIN_JUSTIF} caractères minimum) : elle sera affichée publiquement.` }];
+    const neutre = form.querySelector(`#neutre-${CSS.escape(idCible)}`);
+    const regles = [
+      { champ: justif, test: v => v.length >= MIN_JUSTIF, message: `La justification est obligatoire (${MIN_JUSTIF} caractères minimum) : elle sera affichée publiquement.` },
+      { champ: neutre, test: () => neutre.checked, message: 'Cochez l’engagement de neutralité pour valider votre décision.' }
+    ];
 
     /* --- Décision sur une proposition --- */
     if (form.dataset.loi) {

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lois adoptées — AGORA</title>
+  <link rel="stylesheet" href="css/style.css?v=7">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+  <header id="app-header"></header>
+
+  <main id="contenu" tabindex="-1">
+    <div class="conteneur">
+      <section class="hero">
+        <div>
+          <h1>Lois adoptées</h1>
+          <p>Les propositions citoyennes que les institutions ont mises en place, et ce qu’elles ont donné.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="titre-chiffres">
+        <h2 id="titre-chiffres">En chiffres</h2>
+        <div class="chiffres-cles" id="chiffres-cles"></div>
+      </section>
+
+      <section class="carte" aria-labelledby="titre-themes">
+        <h2 id="titre-themes">Lois adoptées par thème</h2>
+        <p class="aide">Une loi peut compter dans plusieurs thèmes.</p>
+        <ul class="barres" id="barres-themes"></ul>
+      </section>
+
+      <section aria-labelledby="titre-liste">
+        <h2 id="titre-liste">Ce qui a été mis en place</h2>
+        <p class="aide">Les plus récentes en premier.</p>
+        <ul class="liste-adoptees" id="liste-adoptees"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer id="app-footer"></footer>
+  <div id="annonce" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/api-config.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
+  <script src="js/lois-adoptees.js?v=7"></script>
+</body>
+</html>

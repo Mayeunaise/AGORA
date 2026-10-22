@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const motDePasse = document.getElementById('mot-de-passe');
   const zoneErreur = document.getElementById('erreur-connexion');
 
+  document.getElementById('btn-presentation').addEventListener('click', AGORA.ouvrirPresentation);
+
   /* --- Comptes de démonstration --- */
   const zoneDemo = document.getElementById('comptes-demo');
   zoneDemo.innerHTML = Object.entries(AGORA.COMPTES_DEMO).map(([role, id]) => {

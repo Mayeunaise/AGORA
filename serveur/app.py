@@ -90,17 +90,24 @@ def enregistrer_loi(db, loi, compteurs_initiaux=False):
       supprimés : une version périmée de la page ne peut pas effacer le message d'un autre.
     """
     pour, contre = (loi.get('pour', 0), loi.get('contre', 0)) if compteurs_initiaux else (0, 0)
-    db.execute('''INSERT INTO lois (id, titre, theme, portee, region, departement, description,
-                    description_officielle, photo, statut, auteur_id, auteur_pseudo, date_creation, pour, contre)
+    db.execute('''INSERT INTO lois (id, titre, portee, region, departement, description,
+                    description_officielle, photo, statut, auteur_id, auteur_pseudo, date_creation, pour, contre,
+                    date_adoption)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                  ON CONFLICT (id) DO UPDATE SET titre = excluded.titre, theme = excluded.theme,
-                    portee = excluded.portee, region = excluded.region, departement = excluded.departement,
+                  ON CONFLICT (id) DO UPDATE SET titre = excluded.titre,
+                    date_adoption = excluded.date_adoption, portee = excluded.portee, region = excluded.region, departement = excluded.departement,
                     description = excluded.description, description_officielle = excluded.description_officielle,
                     photo = excluded.photo, statut = excluded.statut''',
-               (loi['id'], loi['titre'], loi['theme'], loi.get('portee') or 'locale',
+               (loi['id'], loi['titre'], loi.get('portee') or 'locale',
                 loi.get('region') or '', loi.get('departement') or '', loi['description'],
                 loi.get('descriptionOfficielle') or '', loi.get('photo') or '', loi['statut'],
-                loi['auteurId'], loi['auteurPseudo'], loi['dateCreation'], pour, contre))
+                loi['auteurId'], loi['auteurPseudo'], loi['dateCreation'], pour, contre,
+                loi.get('dateAdoption')))
+
+    themes = loi.get('themes') or ([loi['theme']] if loi.get('theme') else [])
+    db.execute('DELETE FROM lois_themes WHERE loi_id = ?', (loi['id'],))
+    db.executemany('INSERT INTO lois_themes (loi_id, theme, rang) VALUES (?, ?, ?)',
+                   [(loi['id'], t, rang) for rang, t in enumerate(themes)])
 
     r = loi.get('reponseOfficielle')
     if r:
@@ -162,6 +169,9 @@ def lire_lois(db, loi_id=None):
     lois = db.execute(f'SELECT * FROM lois {filtre} ORDER BY date_creation', params).fetchall()
     reponses = {r['loi_id']: r for r in db.execute('SELECT * FROM reponses_officielles')}
     moderations = {m['loi_id']: m for m in db.execute('SELECT * FROM moderations_lois')}
+    themes = {}
+    for t in db.execute('SELECT loi_id, theme FROM lois_themes ORDER BY loi_id, rang'):
+        themes.setdefault(t['loi_id'], []).append(t['theme'])
 
     messages = {}
     for m in db.execute('''SELECT m.*, s.motif, s.date AS s_date, s.par,
@@ -181,11 +191,11 @@ def lire_lois(db, loi_id=None):
     for l in lois:
         r, mod = reponses.get(l['id']), moderations.get(l['id'])
         resultat.append({
-            'id': l['id'], 'titre': l['titre'], 'theme': l['theme'], 'portee': l['portee'],
+            'id': l['id'], 'titre': l['titre'], 'themes': themes.get(l['id'], []), 'portee': l['portee'],
             'region': l['region'], 'departement': l['departement'], 'description': l['description'],
             'descriptionOfficielle': l['description_officielle'], 'photo': l['photo'], 'statut': l['statut'],
             'auteurId': l['auteur_id'], 'auteurPseudo': l['auteur_pseudo'], 'dateCreation': l['date_creation'],
-            'pour': l['pour'], 'contre': l['contre'],
+            'pour': l['pour'], 'contre': l['contre'], 'dateAdoption': l['date_adoption'],
             'reponseOfficielle': {'texte': r['texte'], 'auteur': r['auteur'], 'date': r['date']} if r else None,
             'moderation': {'decision': mod['decision'], 'justification': mod['justification'],
                            'date': mod['date'], 'moderateur': mod['moderateur']} if mod else None,

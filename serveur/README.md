@@ -59,11 +59,14 @@ Pour mettre à jour le serveur après une modification de `app.py` : `cd AGORA &
 sqlite3 agora.db
 sqlite> SELECT titre, statut, pour, contre FROM lois ORDER BY pour DESC;
 sqlite> SELECT l.titre, COUNT(m.id) AS nb_messages FROM lois l LEFT JOIN messages m ON m.loi_id = l.id GROUP BY l.id;
+sqlite> SELECT t.theme, COUNT(*) AS nb_adoptees FROM lois l JOIN lois_themes t ON t.loi_id = l.id
+   ...> WHERE l.statut = 'adoptee' GROUP BY t.theme ORDER BY nb_adoptees DESC;
 ```
 
 Ou ouvrir `agora.db` avec [DB Browser for SQLite](https://sqlitebrowser.org).
 
 **Repartir de zéro** : arrêter le serveur, supprimer `agora.db`, relancer. Les données fictives sont recréées.
+À faire aussi après une modification de `schema.sql` (par exemple l'ajout des thèmes multiples et du statut « Adoptée »).
 
 ## Limites (prototype)
 

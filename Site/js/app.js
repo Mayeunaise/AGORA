@@ -19,10 +19,11 @@ const AGORA = (() => {
     avis: 'agora_avis',
     mode: 'agora_mode',
     journal: 'agora_journal',
-    bandeau: 'agora_bandeau_ferme'
+    bandeau: 'agora_bandeau_ferme',
+    presentation: 'agora_presentation_vue'
   };
   // Changer ce numéro force le rechargement des données JSON
-  const VERSION_DONNEES = '1.0';
+  const VERSION_DONNEES = '2.0';
 
   /* ---------- Référentiels ---------- */
   const COMPTES_DEMO = { citoyen: 'u1', moderateur: 'u2', institution: 'u3' };
@@ -38,13 +39,25 @@ const AGORA = (() => {
     'en-discussion': { label: 'En discussion', aide: 'Ouverte aux avis et au débat' },
     'examinee': { label: 'Examinée', aide: 'En cours d’examen par l’institution, le débat reste ouvert' },
     'cloturee': { label: 'Clôturée', aide: 'L’institution a publié sa réponse' },
+    'adoptee': { label: 'Adoptée', aide: 'Mise en place par l’institution' },
     'refusee': { label: 'Refusée', aide: 'Non conforme aux règles de la plateforme' }
   };
-  // Statuts visibles par tous sur l'accueil
-  const STATUTS_PUBLICS = ['en-discussion', 'examinee', 'cloturee'];
+  // Statuts visibles par tous (les lois adoptées ont leur propre page)
+  const STATUTS_PUBLICS = ['en-discussion', 'examinee', 'cloturee', 'adoptee'];
 
   const THEMES = ['Environnement', 'Transport', 'Éducation', 'Santé', 'Numérique', 'Logement',
     'Agriculture', 'Culture', 'Énergie', 'Sécurité routière', 'Autre'];
+  const MAX_THEMES = 3;
+
+  // Couleur de chaque thème : fond clair + texte foncé (contraste AA)
+  const COULEUR_THEME = {
+    'Environnement': ['#dcfce7', '#166534'], 'Transport': ['#e0f2fe', '#075985'],
+    'Éducation': ['#fef3c7', '#92400e'], 'Santé': ['#ffe4e6', '#9f1239'],
+    'Numérique': ['#ede9fe', '#5b21b6'], 'Logement': ['#ffedd5', '#9a3412'],
+    'Agriculture': ['#ecfccb', '#3f6212'], 'Culture': ['#fae8ff', '#86198f'],
+    'Énergie': ['#fef9c3', '#854d0e'], 'Sécurité routière': ['#fee2e2', '#991b1b'],
+    'Autre': ['#f1f5f9', '#334155']
+  };
 
   const REGIONS = {
     'Auvergne-Rhône-Alpes': ['Ain', 'Isère', 'Loire', 'Haute-Loire', 'Puy-de-Dôme', 'Rhône', 'Savoie'],
@@ -105,6 +118,19 @@ const AGORA = (() => {
     'Numérique': 'ecran', 'Logement': 'immeuble', 'Agriculture': 'epi', 'Culture': 'musique',
     'Énergie': 'soleil', 'Sécurité routière': 'panneau', 'Autre': 'agora'
   };
+
+  /** Thèmes d'une loi (les anciennes données n'en avaient qu'un). */
+  const themesDe = loi => loi.themes || (loi.theme ? [loi.theme] : []);
+
+  const styleTheme = theme => {
+    const [fond, texte] = COULEUR_THEME[theme] || COULEUR_THEME.Autre;
+    return `--theme-fond:${fond};--theme-texte:${texte}`;
+  };
+
+  /** Étiquettes colorées des thèmes d'une loi. */
+  function etiquettesThemes(loi) {
+    return themesDe(loi).map(t => `<span class="etiquette etiquette-theme" style="${styleTheme(t)}">${esc(t)}</span>`).join('');
+  }
 
   /** Renvoie le code SVG d'une icône décorative (masquée aux lecteurs d'écran). */
   function icone(nom, classe = '') {
@@ -575,7 +601,9 @@ const AGORA = (() => {
       roleTexte = ROLES[user.role] + (user.role === 'moderateur' ? (modeModo ? ' · mode modération' : ' · mode citoyen') : '');
 
       nav += lien('accueil.html', 'maison', 'Accueil');
-      nav += lien('creer-loi.html', 'plus', 'Créer une loi');
+      // Neutralité : un modérateur ne propose de loi qu'en mode citoyen
+      if (!modeModo) nav += lien('creer-loi.html', 'plus', 'Créer une loi');
+      nav += lien('lois-adoptees.html', 'check', 'Lois adoptées');
       if (modeModo) {
         nav += lien('moderation-lois.html', 'cloche', 'Alertes', compterAlertes());
         nav += lien('moderation-comptes.html', 'users', 'Comptes', compterDemandesComptes());
@@ -600,6 +628,7 @@ const AGORA = (() => {
         </div>`;
     } else {
       nav += lien('index.html', 'cadenas', 'Connexion');
+      nav += lien('lois-adoptees.html', 'check', 'Lois adoptées');
       nav += lien('inscription.html', 'user', 'Créer un compte');
       nav += lien('regles.html', 'info', 'Règles');
     }
@@ -656,6 +685,68 @@ const AGORA = (() => {
     });
   }
 
+  /* ---------- Présentation de l'app (onboarding) ---------- */
+  const ETAPES_PRESENTATION = [
+    { icone: 'agora', titre: 'Bienvenue sur AGORA',
+      texte: 'AGORA permet de proposer des idées de lois, d’en débattre et de dire si elles vous plaisent. Les institutions y répondent publiquement.' },
+    { icone: 'plus', titre: 'Proposez une idée',
+      texte: 'Décrivez le problème et votre solution, choisissez jusqu’à 3 thèmes et la portée : locale ou nationale. Un modérateur vérifie qu’elle respecte les règles avant de la publier.' },
+    { icone: 'pouceHaut', titre: 'Donnez votre avis et débattez',
+      texte: 'Favorable ou défavorable : c’est un avis consultatif, pas un vote officiel. Un seul avis par compte. Dans le débat, argumentez avec respect.' },
+    { icone: 'bouclier', titre: 'Une modération neutre',
+      texte: 'Les modérateurs vérifient la forme, jamais l’opinion. Chaque décision est justifiée et publiée dans le journal de modération.' },
+    { icone: 'check', titre: 'Suivez ce que devient une idée',
+      texte: 'L’institution examine les propositions, publie une réponse officielle et peut les adopter. Les mesures mises en place sont dans « Lois adoptées ».' }
+  ];
+
+  const presentationVue = () => !!lire(CLES.presentation);
+
+  /** Ouvre la présentation pas à pas. Elle est marquée comme vue à la fermeture. */
+  function ouvrirPresentation() {
+    let dialog = document.getElementById('dialog-presentation');
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.id = 'dialog-presentation';
+      dialog.className = 'presentation';
+      dialog.setAttribute('aria-labelledby', 'presentation-titre');
+      document.body.appendChild(dialog);
+    }
+    const origine = document.activeElement;
+    let etape = 0;
+
+    function afficher() {
+      const e = ETAPES_PRESENTATION[etape];
+      const derniere = etape === ETAPES_PRESENTATION.length - 1;
+      dialog.innerHTML = `
+        <button type="button" class="presentation-fermer" data-action="fermer" aria-label="Fermer la présentation">${icone('croix')}</button>
+        <div class="presentation-icone">${icone(e.icone)}</div>
+        <p class="presentation-etape">Étape ${etape + 1} sur ${ETAPES_PRESENTATION.length}</p>
+        <h2 id="presentation-titre" tabindex="-1">${esc(e.titre)}</h2>
+        <p>${esc(e.texte)}</p>
+        <div class="presentation-points" aria-hidden="true">
+          ${ETAPES_PRESENTATION.map((_, i) => `<span class="${i === etape ? 'actif' : ''}"></span>`).join('')}
+        </div>
+        <div class="actions">
+          ${etape > 0 ? '<button type="button" class="btn btn-secondaire" data-action="precedent">Précédent</button>' : '<button type="button" class="btn btn-discret" data-action="fermer">Passer</button>'}
+          <button type="button" class="btn btn-primaire" data-action="${derniere ? 'fermer' : 'suivant'}">${derniere ? 'C’est parti' : 'Suivant'}</button>
+        </div>`;
+      dialog.querySelector('#presentation-titre').focus();
+    }
+
+    dialog.onclick = ev => {
+      const action = ev.target.closest('[data-action]')?.dataset.action;
+      if (action === 'suivant') { etape++; afficher(); }
+      if (action === 'precedent') { etape--; afficher(); }
+      if (action === 'fermer') dialog.close();
+    };
+    dialog.onclose = () => {
+      ecrire(CLES.presentation, true);
+      if (origine && document.body.contains(origine)) origine.focus();
+    };
+    afficher();
+    dialog.showModal();
+  }
+
   function renderFooter() {
     const footer = document.getElementById('app-footer');
     if (!footer) return;
@@ -707,6 +798,7 @@ const AGORA = (() => {
   return {
     ROLES, STATUTS, STATUTS_PUBLICS, THEMES, REGIONS, MOTIFS_SIGNALEMENT, ICONE_THEME, COMPTES_DEMO,
     icone, demarrer, reinitialiser, renderHeader, enLigne, attendreEnregistrements,
+    MAX_THEMES, themesDe, styleTheme, etiquettesThemes, basculerMode, ouvrirPresentation, presentationVue,
     getLois, getLoi, saveLoi, getUsers, getUser, saveUser,
     utilisateurCourant, connecter, deconnecter, authentifier, estModeModeration,
     getAvis, donnerAvis, compterAlertes, compterDemandesComptes,
