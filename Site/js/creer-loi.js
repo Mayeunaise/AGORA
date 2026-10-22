@@ -1,7 +1,7 @@
 /* =========================================================
    AGORA — js/creer-loi.js
    Formulaire de proposition : titre, photo (aperçu), description,
-   thème, région / département. La loi créée est « soumise »
+   thème, portée (nationale ou locale : région / département). La loi créée est « soumise »
    et attend la validation d'un modérateur.
    ========================================================= */
 'use strict';
@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     optionVideRegion: 'Choisissez une région',
     optionVideDept: 'Choisissez un département'
   });
+
+  /* --- Portée : une loi nationale n'a ni région ni département --- */
+  const blocLieu = $('bloc-lieu');
+  const estNationale = () => $('portee-nationale').checked;
+  document.querySelectorAll('input[name="portee"]').forEach(radio => radio.addEventListener('change', () => {
+    blocLieu.hidden = estNationale();
+    if (estNationale()) [$('region'), $('departement')].forEach(A.effacerErreur);
+  }));
 
   /* --- Compteurs de caractères --- */
   [[titre, 'titre-compteur', 120], [description, 'description-compteur', 2000]].forEach(([champ, idCompteur, max]) => {
@@ -92,21 +100,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   /* --- Envoi --- */
   form.addEventListener('submit', e => {
     e.preventDefault();
-    const ok = A.valider([
+    const nationale = estNationale();
+    const regles = [
       { champ: titre, test: v => v.length >= 10, message: 'Le titre doit contenir au moins 10 caractères.' },
       { champ: description, test: v => v.length >= 80, message: `Décrivez davantage votre idée : 80 caractères minimum (actuellement ${description.value.trim().length}).` },
-      { champ: $('theme'), test: v => v.length > 0, message: 'Choisissez un thème.' },
+      { champ: $('theme'), test: v => v.length > 0, message: 'Choisissez un thème.' }
+    ];
+    if (!nationale) regles.push(
       { champ: $('region'), test: v => v.length > 0, message: 'Choisissez la région concernée.' },
       { champ: $('departement'), test: v => v.length > 0, message: 'Choisissez le département concerné.' }
-    ]);
+    );
+    const ok = A.valider(regles);
     if (!ok) return;
 
     const loi = {
       id: A.genererId('L'),
       titre: titre.value.trim(),
       theme: $('theme').value,
-      region: $('region').value,
-      departement: $('departement').value,
+      portee: nationale ? 'nationale' : 'locale',
+      region: nationale ? '' : $('region').value,
+      departement: nationale ? '' : $('departement').value,
       description: description.value.trim(),
       descriptionOfficielle: '',
       photo: photoDataUrl,

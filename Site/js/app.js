@@ -17,7 +17,8 @@ const AGORA = (() => {
     session: 'agora_session',
     avis: 'agora_avis',
     mode: 'agora_mode',
-    journal: 'agora_journal'
+    journal: 'agora_journal',
+    bandeau: 'agora_bandeau_ferme'
   };
   // Changer ce numéro force le rechargement des données JSON
   const VERSION_DONNEES = '1.0';
@@ -406,6 +407,11 @@ const AGORA = (() => {
     return a;
   }
 
+  /** Lieu affiché d'une loi : « France entière » si elle est nationale. */
+  function lieu(loi) {
+    return loi.portee === 'nationale' ? 'France entière' : `${loi.region} · ${loi.departement}`;
+  }
+
   /** Remplit un <select> de régions, puis lie le <select> des départements. */
   function lierRegionDepartement(selectRegion, selectDept, { optionVideRegion, optionVideDept, valeurRegion = '', valeurDept = '' }) {
     selectRegion.innerHTML = `<option value="">${esc(optionVideRegion)}</option>` +
@@ -485,9 +491,19 @@ const AGORA = (() => {
         <button type="button" class="btn-menu" aria-expanded="false" aria-controls="nav-principale">${icone('menu')}<span>Menu</span></button>
         <nav id="nav-principale" class="nav-principale" aria-label="Navigation principale">${nav}</nav>
       </div>
-      <div class="bandeau-info" role="note">
-        <p>${icone('info')}<span><strong>Avis consultatif et simulé :</strong> donner un avis « favorable » ou « défavorable » exprime si une idée vous plaît. Ce n’est pas un vote officiel. Toutes les données sont fictives.</span></p>
-      </div>`;
+      ${lire(CLES.bandeau) ? '' : `<div class="bandeau-info" role="note">
+        <p>${icone('info')}<span><strong>Avis consultatif et simulé :</strong> donner un avis « favorable » ou « défavorable » exprime si une idée vous plaît. Ce n’est pas un vote officiel. Toutes les données sont fictives.</span>
+          <button type="button" class="bandeau-fermer" aria-label="Fermer le message « Avis consultatif et simulé »">${icone('croix')}</button></p>
+      </div>`}`;
+
+    // Fermeture du bandeau, mémorisée jusqu'à la réinitialisation des données
+    const btnFermer = header.querySelector('.bandeau-fermer');
+    if (btnFermer) btnFermer.addEventListener('click', () => {
+      ecrire(CLES.bandeau, true);
+      header.querySelector('.bandeau-info').remove();
+      header.querySelector('.btn-menu').focus();
+      annoncer('Message fermé. Ces informations restent dans le pied de page.');
+    });
 
     // Menu mobile
     const boutonMenu = header.querySelector('.btn-menu');
@@ -571,6 +587,6 @@ const AGORA = (() => {
     getAvis, donnerAvis, compterAlertes, compterDemandesComptes,
     ajouterJournal, getJournal, libelleDecision,
     esc, paragraphes, formatDate, formatNombre, pseudo, badgeStatut, pourcentages, normaliser, genererId,
-    annoncer, afficherErreur, effacerErreur, valider, estEmail, age, lierRegionDepartement
+    annoncer, afficherErreur, effacerErreur, valider, estEmail, age, lierRegionDepartement, lieu
   };
 })();

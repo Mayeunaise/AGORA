@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return `
       <article class="carte element-moderation" aria-labelledby="titre-${i}">
         <div class="carte-loi-meta">${A.badgeStatut(loi.statut)}<span class="etiquette">${A.esc(loi.theme)}</span>
-          <span class="lieu">${A.icone('epingle')}${A.esc(loi.region)} · ${A.esc(loi.departement)}</span></div>
+          <span class="lieu">${A.icone('epingle')}${A.esc(A.lieu(loi))}</span></div>
         <h3 id="titre-${i}">${A.esc(loi.titre)}</h3>
         <p class="aide">Proposée par ${A.esc(loi.auteurPseudo)} le ${A.formatDate(loi.dateCreation, true)}</p>
         ${loi.photo ? `<img class="photo-loi" src="${loi.photo}" alt="Photo jointe à la proposition « ${A.esc(loi.titre)} »">` : ''}

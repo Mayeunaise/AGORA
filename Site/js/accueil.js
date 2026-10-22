@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="carte-loi-corps">
           <div class="carte-loi-meta">${AGORA.badgeStatut(loi.statut)}<span class="etiquette">${AGORA.esc(loi.theme)}</span></div>
           <h2><a href="loi.html?id=${encodeURIComponent(loi.id)}">${AGORA.esc(loi.titre)}</a></h2>
-          <span class="lieu">${AGORA.icone('epingle')}${AGORA.esc(loi.region)} · ${AGORA.esc(loi.departement)}</span>
+          <span class="lieu">${AGORA.icone('epingle')}${AGORA.esc(AGORA.lieu(loi))}</span>
           <div class="carte-loi-pied">
             <div class="barre-avis" aria-hidden="true">
               <span class="part-pour" style="width:${p.pour}%"></span><span class="part-contre" style="width:${p.contre}%"></span>
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (mots.length) {
       lois = lois.filter(l => {
-        const texte = AGORA.normaliser(`${l.titre} ${l.description} ${l.descriptionOfficielle} ${l.theme} ${l.region} ${l.departement}`);
+        const texte = AGORA.normaliser(`${l.titre} ${l.description} ${l.descriptionOfficielle} ${l.theme} ${AGORA.lieu(l)} ${l.portee || ''}`);
         return mots.every(m => texte.includes(m));
       });
     }

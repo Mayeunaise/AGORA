@@ -252,6 +252,20 @@ img { max-width: 100%; display: block; }
   gap: 0.45rem;
   align-items: flex-start;
 }
+.bandeau-info p > span { flex: 1; }
+.bandeau-fermer {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 32px; height: 32px;
+  margin: -0.3rem -0.4rem -0.3rem 0;
+  background: none;
+  border: none;
+  border-radius: var(--rayon-petit);
+  color: var(--accent-fonce);
+  cursor: pointer;
+}
+.bandeau-fermer:hover { background: #f3c9ad; }
 
 /* ---------- Footer ---------- */
 .site-footer {
@@ -382,6 +396,7 @@ fieldset { border: none; padding: 0; margin: 0 0 1rem; }
 .compteur-car { text-align: right; font-size: 0.82rem; color: var(--texte-doux); margin-top: 0.2rem; }
 
 .grille-2 { display: grid; gap: 0 1rem; }
+.grille-2[hidden] { display: none; }
 
 /* Alerte en haut de formulaire */
 .alerte {

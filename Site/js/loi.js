@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="meta-haut">
           ${A.badgeStatut(loi.statut)}
           <span class="etiquette">${A.esc(loi.theme)}</span>
-          <span class="lieu">${A.icone('epingle')}${A.esc(loi.region)} · ${A.esc(loi.departement)}</span>
+          <span class="lieu">${A.icone('epingle')}${A.esc(A.lieu(loi))}</span>
         </div>
         <h1>${A.esc(loi.titre)}</h1>
         <p class="aide">Proposée par ${A.esc(loi.auteurPseudo)} le ${A.formatDate(loi.dateCreation)} · ${A.esc(A.STATUTS[loi.statut].aide)}</p>

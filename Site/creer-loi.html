@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Créer une loi — AGORA</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -45,7 +45,19 @@
           <select id="theme"></select>
         </div>
 
-        <div class="grille-2">
+        <fieldset class="champ">
+          <legend>Portée de la loi <span class="obligatoire" aria-hidden="true">*</span></legend>
+          <div class="choix">
+            <input type="radio" name="portee" id="portee-locale" value="locale" checked aria-controls="bloc-lieu">
+            <label for="portee-locale">Locale : elle concerne une région et un département</label>
+          </div>
+          <div class="choix">
+            <input type="radio" name="portee" id="portee-nationale" value="nationale" aria-controls="bloc-lieu">
+            <label for="portee-nationale">Nationale : elle concerne toute la France</label>
+          </div>
+        </fieldset>
+
+        <div class="grille-2" id="bloc-lieu">
           <div class="champ">
             <label for="region">Région concernée <span class="obligatoire" aria-hidden="true">*</span></label>
             <select id="region"></select>
@@ -72,7 +84,7 @@
   <footer id="app-footer"></footer>
   <div id="annonce" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/app.js"></script>
-  <script src="js/creer-loi.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/creer-loi.js?v=3"></script>
 </body>
 </html>
