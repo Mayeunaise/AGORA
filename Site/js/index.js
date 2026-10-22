@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   /* --- Soumission --- */
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     zoneErreur.innerHTML = '';
     const ok = AGORA.valider([
@@ -55,7 +55,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     ]);
     if (!ok) return;
 
-    const compte = AGORA.authentifier(email.value, motDePasse.value);
+    let compte;
+    try {
+      compte = await AGORA.authentifier(email.value, motDePasse.value);
+    } catch (err) {
+      zoneErreur.innerHTML = `<div class="alerte alerte-erreur" role="alert">${AGORA.icone('alerte')}<p>Le serveur ne répond pas. Vérifiez votre connexion puis réessayez.</p></div>`;
+      return;
+    }
     if (!compte) {
       // Message volontairement générique : on ne révèle pas si l'adresse existe
       zoneErreur.innerHTML = `<div class="alerte alerte-erreur" role="alert">${AGORA.icone('alerte')}<p>Adresse mail ou mot de passe incorrect. Vérifiez votre saisie ou utilisez un compte de démonstration.</p></div>`;

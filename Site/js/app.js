@@ -1,7 +1,7 @@
 /* =========================================================
    AGORA — js/app.js
    Fichier commun à toutes les pages :
-   - données partagées dans Firebase Firestore (js/firebase-config.js),
+   - données partagées via le serveur Python + SQLite (js/api-config.js),
      ou, sans configuration, données fictives (data/*.json) dans localStorage
    - session SIMULÉE (aucune sécurité réelle : prototype pédagogique)
    - rôles, mode modération, header, bandeau, pied de page
@@ -138,18 +138,30 @@ const AGORA = (() => {
     return reponse.json();
   }
 
-  /* ---------- Base de données partagée (Firebase Firestore) ---------- */
-  // Sans configuration dans js/firebase-config.js, tout reste dans le navigateur.
-  const VERSION_FIREBASE = '10.12.2';
-  const COLLECTIONS = ['lois', 'users', 'avis', 'journal'];
-  let fs = null;  // fonctions du SDK Firestore
-  let db = null;
-  // Copie en mémoire de la base, tenue à jour en temps réel
+  /* ---------- Base de données partagée (serveur Python + SQLite) ---------- */
+  // Sans adresse dans js/api-config.js, tout reste dans le navigateur.
+  let api = null;  // adresse du serveur, sans « / » final
+  // Copie en mémoire de la base, rafraîchie régulièrement
   const memoire = { lois: [], users: [], avis: {}, journal: [] };
   const enregistrements = new Set();
 
-  const enLigne = () => db !== null;
+  const enLigne = () => api !== null;
   const copie = valeur => JSON.parse(JSON.stringify(valeur));
+
+  /** Appelle l'API JSON du serveur. Les erreurs HTTP portent leur code dans `status`. */
+  async function appelerApi(chemin, methode = 'GET', corps) {
+    const reponse = await fetch(api + chemin, {
+      method: methode,
+      headers: corps ? { 'Content-Type': 'application/json' } : undefined,
+      body: corps ? JSON.stringify(corps) : undefined
+    });
+    if (!reponse.ok) {
+      const erreur = new Error(`${methode} ${chemin} : HTTP ${reponse.status}`);
+      erreur.status = reponse.status;
+      throw erreur;
+    }
+    return reponse.json();
+  }
 
   /** Suit une écriture en ligne et prévient en cas d'échec. */
   function suivre(promesse) {
@@ -165,67 +177,27 @@ const AGORA = (() => {
   /** À appeler avant de changer de page juste après une écriture. */
   const attendreEnregistrements = () => Promise.all([...enregistrements]);
 
-  function remplir(nom, snap) {
-    if (nom === 'avis') {
-      memoire.avis = Object.fromEntries(snap.docs.map(d => [d.id, d.data()]));
-      return;
-    }
-    memoire[nom] = snap.docs.map(d => d.data());
-    if (nom === 'lois') memoire.lois.sort((a, b) => new Date(a.dateCreation) - new Date(b.dateCreation));
-    if (nom === 'journal') memoire.journal.sort((a, b) => new Date(b.date) - new Date(a.date));
+  function remplirMemoire(donnees) {
+    memoire.lois = donnees.lois;
+    memoire.users = donnees.utilisateurs;
+    memoire.avis = donnees.avis;
+    memoire.journal = donnees.journal;
   }
 
-  async function chargerDepuisFirebase(config) {
-    const base = `https://www.gstatic.com/firebasejs/${VERSION_FIREBASE}`;
-    const [{ initializeApp }, sdk] = await Promise.all([
-      import(`${base}/firebase-app.js`),
-      import(`${base}/firebase-firestore.js`)
-    ]);
-    fs = sdk;
-    db = fs.initializeFirestore(initializeApp(config), {
-      localCache: fs.persistentLocalCache({ tabManager: fs.persistentMultipleTabManager() })
-    });
-    // Tests en local avec l'émulateur Firebase : emulateur: ['127.0.0.1', 8085]
-    if (config.emulateur) fs.connectFirestoreEmulator(db, ...config.emulateur);
+  async function chargerDepuisApi(adresse) {
+    api = adresse.replace(/\/+$/, '');
+    remplirMemoire(await appelerApi('/api/donnees'));
 
-    // Premier lancement : la base est remplie avec les données fictives
-    const meta = await fs.getDoc(fs.doc(db, 'meta', 'donnees'));
-    if (!meta.exists()) await initialiserBase();
-
-    const snaps = await Promise.all(COLLECTIONS.map(nom => fs.getDocs(fs.collection(db, nom))));
-    COLLECTIONS.forEach((nom, i) => remplir(nom, snaps[i]));
-
-    // Mises à jour en direct : les pages peuvent écouter l'événement « agora:donnees »
-    COLLECTIONS.forEach(nom => fs.onSnapshot(fs.collection(db, nom), snap => {
-      remplir(nom, snap);
-      document.dispatchEvent(new CustomEvent('agora:donnees', { detail: nom }));
-    }));
-  }
-
-  async function initialiserBase() {
-    const [lois, users] = await Promise.all([lireJSON('data/lois.json'), lireJSON('data/users.json')]);
-    const lot = fs.writeBatch(db);
-    lois.forEach(l => lot.set(fs.doc(db, 'lois', l.id), l));
-    users.forEach(u => lot.set(fs.doc(db, 'users', u.id), u));
-    journalInitial(lois).forEach((entree, i) => lot.set(fs.doc(db, 'journal', `J-initial-${i}`), entree));
-    lot.set(fs.doc(db, 'meta', 'donnees'), { version: VERSION_DONNEES, date: new Date().toISOString() });
-    await lot.commit();
-  }
-
-  /**
-   * Fusionne une loi modifiée avec sa version en ligne, pour ne pas effacer
-   * le travail des autres : messages réunis, compteurs d'avis gardés en ligne.
-   */
-  function fusionnerLoi(versionEnLigne, locale) {
-    if (!versionEnLigne) return locale;
-    const messages = new Map((versionEnLigne.messages || []).map(m => [m.id, m]));
-    locale.messages.forEach(m => messages.set(m.id, m));
-    return {
-      ...locale,
-      pour: versionEnLigne.pour,
-      contre: versionEnLigne.contre,
-      messages: [...messages.values()].sort((a, b) => new Date(a.date) - new Date(b.date))
-    };
+    // Rafraîchissement régulier : les pages peuvent écouter l'événement « agora:donnees »
+    setInterval(async () => {
+      if (document.hidden || enregistrements.size) return;
+      try {
+        remplirMemoire(await appelerApi('/api/donnees'));
+        document.dispatchEvent(new CustomEvent('agora:donnees', { detail: 'lois' }));
+      } catch (e) {
+        // Serveur injoignable : nouvel essai au tour suivant
+      }
+    }, 20000);
   }
 
   function remplacer(liste, element) {
@@ -235,7 +207,7 @@ const AGORA = (() => {
 
   /** Charge les données : base en ligne si configurée, sinon données fictives locales. */
   async function chargerDonnees() {
-    if (window.AGORA_FIREBASE) return chargerDepuisFirebase(window.AGORA_FIREBASE);
+    if (window.AGORA_API) return chargerDepuisApi(window.AGORA_API);
     if (lire(CLES.version) === VERSION_DONNEES && lire(CLES.lois) && lire(CLES.users)) return;
     const [lois, users] = await Promise.all([lireJSON('data/lois.json'), lireJSON('data/users.json')]);
     ecrire(CLES.lois, lois);
@@ -280,12 +252,10 @@ const AGORA = (() => {
 
   function saveLoi(loiModifiee) {
     if (enLigne()) {
+      // Le serveur fusionne les messages et garde ses compteurs d'avis, puis renvoie la loi à jour
       remplacer(memoire.lois, copie(loiModifiee));
-      const ref = fs.doc(db, 'lois', loiModifiee.id);
-      suivre(fs.runTransaction(db, async t => {
-        const actuelle = await t.get(ref);
-        t.set(ref, fusionnerLoi(actuelle.exists() ? actuelle.data() : null, loiModifiee));
-      }));
+      suivre(appelerApi(`/api/lois/${encodeURIComponent(loiModifiee.id)}`, 'PUT', loiModifiee)
+        .then(loi => remplacer(memoire.lois, loi)));
       return true;
     }
     const lois = getLois();
@@ -304,8 +274,10 @@ const AGORA = (() => {
 
   function saveUser(userModifie) {
     if (enLigne()) {
-      remplacer(memoire.users, copie(userModifie));
-      suivre(fs.setDoc(fs.doc(db, 'users', userModifie.id), userModifie));
+      // Le mot de passe est haché par le serveur et n'est jamais renvoyé
+      const { motDePasse, ...sansMotDePasse } = userModifie;
+      remplacer(memoire.users, copie(sansMotDePasse));
+      suivre(appelerApi(`/api/utilisateurs/${encodeURIComponent(userModifie.id)}`, 'PUT', userModifie));
       return true;
     }
     const users = getUsers();
@@ -326,7 +298,7 @@ const AGORA = (() => {
     const complete = { date: new Date().toISOString(), ...entree };
     if (enLigne()) {
       memoire.journal.unshift(complete);
-      suivre(fs.addDoc(fs.collection(db, 'journal'), complete));
+      suivre(appelerApi('/api/journal', 'POST', complete));
       return;
     }
     const journal = lire(CLES.journal, []);
@@ -354,8 +326,20 @@ const AGORA = (() => {
     location.href = 'index.html';
   }
 
-  /** Authentification simulée : comparaison en clair, aucune sécurité réelle. */
-  function authentifier(email, motDePasse) {
+  /**
+   * Vérifie l'adresse et le mot de passe. Renvoie le compte ou null.
+   * En ligne, la vérification se fait sur le serveur (mot de passe haché) ;
+   * en local, c'est une simple comparaison en clair (simulation).
+   */
+  async function authentifier(email, motDePasse) {
+    if (enLigne()) {
+      try {
+        return await appelerApi('/api/connexion', 'POST', { email: email.trim(), motDePasse });
+      } catch (e) {
+        if (e.status === 401) return null;
+        throw e;
+      }
+    }
     const user = getUsers().find(u => u.email.toLowerCase() === email.trim().toLowerCase());
     if (!user || user.motDePasse !== motDePasse) return null;
     return user;
@@ -399,13 +383,13 @@ const AGORA = (() => {
       delete avis[userId][loiId];
     }
     if (enLigne()) {
-      // Compteurs incrémentés en ligne : deux avis simultanés ne s'écrasent pas
+      // Compteurs recalculés par le serveur : deux avis simultanés ne s'écrasent pas
       remplacer(memoire.lois, loi);
-      const compteurs = {};
-      if (precedent) compteurs[precedent] = fs.increment(-1);
-      if (final) compteurs[final] = fs.increment(1);
-      suivre(fs.updateDoc(fs.doc(db, 'lois', loiId), compteurs));
-      suivre(fs.setDoc(fs.doc(db, 'avis', userId), { [loiId]: final || fs.deleteField() }, { merge: true }));
+      suivre(appelerApi('/api/avis', 'POST', { utilisateurId: userId, loiId, valeur: final })
+        .then(compteurs => {
+          const enMemoire = memoire.lois.find(l => l.id === loiId);
+          if (enMemoire) Object.assign(enMemoire, compteurs);
+        }));
       return final;
     }
     saveLoi(loi);
@@ -696,7 +680,7 @@ const AGORA = (() => {
         main.innerHTML = `<div class="conteneur conteneur-etroit"><div class="alerte alerte-erreur" role="alert">${icone('alerte')}<div>
           <p><strong>Les données de démonstration n’ont pas pu être chargées.</strong></p>
           <p>Ouvrez le site avec un serveur local (extension Live Server de VS Code) ou via son adresse GitHub Pages, et non en double-cliquant sur le fichier.</p>
-          <p>Si la base en ligne est activée, vérifiez votre connexion Internet et la configuration dans js/firebase-config.js.</p></div></div></div>`;
+          <p>Si la base en ligne est activée, vérifiez votre connexion Internet et l’adresse du serveur dans js/api-config.js.</p></div></div></div>`;
       }
       return null;
     }

@@ -1,0 +1,5 @@
+# Base SQLite créée au premier lancement du serveur
+serveur/agora.db
+serveur/agora.db-journal
+__pycache__/
+.venv/

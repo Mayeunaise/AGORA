@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       prenom: $('prenom').value.trim(),
       nom: $('nom').value.trim(),
       email: $('email').value.trim(),
-      motDePasse: $('mot-de-passe').value.trim(), // stocké en clair : SIMULATION uniquement
+      motDePasse: $('mot-de-passe').value.trim(), // haché par le serveur ; en clair en mode local (simulation)
       dateNaissance: $('date-naissance').value,
       genre: $('genre').value,
       role: 'citoyen',
