@@ -1,0 +1,80 @@
+[
+  {
+    "id": "u1",
+    "prenom": "Camille",
+    "nom": "Martin",
+    "email": "citoyen@agora.demo",
+    "motDePasse": "demo1234",
+    "dateNaissance": "1998-04-12",
+    "genre": "femme",
+    "role": "citoyen",
+    "dateInscription": "2026-09-02T10:15:00",
+    "demandeInstitution": null
+  },
+  {
+    "id": "u2",
+    "prenom": "Yanis",
+    "nom": "Benali",
+    "email": "moderateur@agora.demo",
+    "motDePasse": "demo1234",
+    "dateNaissance": "1991-11-03",
+    "genre": "homme",
+    "role": "moderateur",
+    "dateInscription": "2026-08-20T09:00:00",
+    "demandeInstitution": null
+  },
+  {
+    "id": "u3",
+    "prenom": "Claire",
+    "nom": "Dubois",
+    "email": "institution@agora.demo",
+    "motDePasse": "demo1234",
+    "dateNaissance": "1978-06-25",
+    "genre": "femme",
+    "role": "institution",
+    "dateInscription": "2026-08-21T14:30:00",
+    "demandeInstitution": {
+      "organisme": "Ministère de la Transition écologique (fictif)",
+      "fonction": "Chargée de mission participation citoyenne",
+      "date": "2026-08-21T14:30:00",
+      "statut": "acceptee",
+      "justification": "Fonction vérifiée auprès de l'organisme (simulation)."
+    }
+  },
+  {
+    "id": "u4",
+    "prenom": "Hugo",
+    "nom": "Lefèvre",
+    "email": "hugo@agora.demo",
+    "motDePasse": "demo1234",
+    "dateNaissance": "1985-02-17",
+    "genre": "homme",
+    "role": "citoyen",
+    "dateInscription": "2026-09-15T18:42:00",
+    "demandeInstitution": {
+      "organisme": "Mairie de Saint-Étienne (fictif)",
+      "fonction": "Chargé de mission démocratie participative",
+      "date": "2026-10-12T09:20:00",
+      "statut": "en attente",
+      "justification": ""
+    }
+  },
+  {
+    "id": "u5",
+    "prenom": "Inès",
+    "nom": "Moreau",
+    "email": "ines@agora.demo",
+    "motDePasse": "demo1234",
+    "dateNaissance": "2001-09-30",
+    "genre": "non-precise",
+    "role": "citoyen",
+    "dateInscription": "2026-10-01T11:05:00",
+    "demandeInstitution": {
+      "organisme": "Association Les Amis du Vélo",
+      "fonction": "Présidente",
+      "date": "2026-10-16T16:10:00",
+      "statut": "en attente",
+      "justification": ""
+    }
+  }
+]

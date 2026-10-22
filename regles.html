@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Règles et transparence — AGORA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+  <header id="app-header"></header>
+
+  <main id="contenu" tabindex="-1">
+    <div class="conteneur conteneur-etroit">
+      <h1>Règles et transparence</h1>
+      <p class="aide">Comment fonctionne AGORA, ce que vaut un avis, et comment la modération décide.</p>
+
+      <nav class="carte" aria-labelledby="titre-sommaire">
+        <h2 id="titre-sommaire">Sommaire</h2>
+        <ul>
+          <li><a href="#avis">Un avis consultatif, pas un vote</a></li>
+          <li><a href="#parcours">Le parcours d’une proposition</a></li>
+          <li><a href="#moderation">Comment fonctionne la modération</a></li>
+          <li><a href="#refus">Pourquoi une proposition peut être refusée</a></li>
+          <li><a href="#donnees">Vos données</a></li>
+          <li><a href="#journal">Journal public de modération</a></li>
+        </ul>
+      </nav>
+
+      <section class="carte" id="avis" aria-labelledby="titre-avis">
+        <h2 id="titre-avis">Un avis consultatif, pas un vote</h2>
+        <p>Donner un avis <strong>favorable</strong> ou <strong>défavorable</strong> revient à dire « cette idée me plaît » ou « elle ne me plaît pas ». Ce n’est <strong>pas un vote officiel</strong> et le résultat ne constitue <strong>jamais une décision</strong>.</p>
+        <ul>
+          <li><strong>Un seul avis par compte</strong> et par proposition. Vous pouvez le changer ou le retirer tant que la proposition est « En discussion ».</li>
+          <li><strong>Représentativité limitée :</strong> seules les personnes qui participent sont comptées. C’est pourquoi le nombre de participants est toujours affiché à côté des pourcentages.</li>
+          <li><strong>Protection des opinions :</strong> votre avis n’est jamais public. L’institution ne voit que des totaux, jamais qui a donné quel avis.</li>
+          <li><strong>Risques de manipulation :</strong> des comptes multiples ou des campagnes organisées peuvent fausser les chiffres. Une vraie plateforme devrait les détecter ; ce prototype ne le fait pas.</li>
+        </ul>
+      </section>
+
+      <section class="carte" id="parcours" aria-labelledby="titre-parcours">
+        <h2 id="titre-parcours">Le parcours d’une proposition</h2>
+        <ol>
+          <li><span class="statut statut-soumise"><span class="pastille" aria-hidden="true"></span>Soumise</span> : un citoyen dépose son idée, la modération la vérifie.</li>
+          <li><span class="statut statut-en-discussion"><span class="pastille" aria-hidden="true"></span>En discussion</span> : tout le monde peut donner son avis et débattre.</li>
+          <li><span class="statut statut-examinee"><span class="pastille" aria-hidden="true"></span>Examinée</span> : l’institution étudie la proposition ; le débat reste ouvert, les avis sont figés.</li>
+          <li><span class="statut statut-cloturee"><span class="pastille" aria-hidden="true"></span>Clôturée</span> : l’institution publie une réponse officielle, obligatoire pour clôturer.</li>
+        </ol>
+        <p>Une proposition non conforme passe au statut <span class="statut statut-refusee"><span class="pastille" aria-hidden="true"></span>Refusée</span>, avec la justification de la modération.</p>
+      </section>
+
+      <section class="carte" id="moderation" aria-labelledby="titre-moderation">
+        <h2 id="titre-moderation">Comment fonctionne la modération</h2>
+        <ul>
+          <li>Chaque proposition est relue avant publication. Le modérateur peut l’<strong>accepter</strong>, la <strong>modifier</strong> (forme uniquement : titre neutre, orthographe, propos déplacés) ou la <strong>refuser</strong>.</li>
+          <li>Tout le monde peut <strong>signaler un message</strong> du débat. Le modérateur le conserve ou le masque.</li>
+          <li><strong>Toute décision est justifiée par écrit</strong>. La justification est visible sur la fiche concernée et dans le journal ci-dessous.</li>
+          <li>Un message masqué reste signalé comme tel : on sait qu’il a existé et pourquoi il a été retiré.</li>
+          <li>Les modérateurs ne peuvent pas être responsables institutionnels, pour garantir leur neutralité.</li>
+          <li><strong>Recours :</strong> l’auteur d’une proposition refusée peut la reformuler et la soumettre à nouveau.</li>
+        </ul>
+      </section>
+
+      <section class="carte" id="refus" aria-labelledby="titre-refus">
+        <h2 id="titre-refus">Pourquoi une proposition peut être refusée</h2>
+        <ul>
+          <li>Propos injurieux, discriminatoires ou appel à la haine.</li>
+          <li>Proposition trop vague pour être débattue (pas de mesure concrète).</li>
+          <li>Doublon d’une proposition déjà en discussion.</li>
+          <li>Publicité, spam, ou sujet sans lien avec une décision publique.</li>
+          <li>Données personnelles d’un tiers (nom, adresse, photo d’une personne reconnaissable).</li>
+        </ul>
+        <p class="aide">Une proposition n’est jamais refusée parce que la modération n’est pas d’accord avec l’idée.</p>
+      </section>
+
+      <section class="carte" id="donnees" aria-labelledby="titre-donnees">
+        <h2 id="titre-donnees">Vos données</h2>
+        <p><strong>Ce site est un prototype pédagogique.</strong> Toutes les propositions, tous les comptes et tous les chiffres sont fictifs. Rien n’est envoyé sur un serveur : les données restent dans votre navigateur (localStorage) et peuvent être effacées depuis « Mon compte ».</p>
+        <p>L’authentification est simulée : les mots de passe ne sont pas protégés. N’utilisez jamais de vraies informations.</p>
+        <p>Dans une version réelle, seules les données nécessaires seraient collectées (principe de minimisation du RGPD), avec une durée de conservation annoncée et un droit de suppression.</p>
+      </section>
+
+      <section class="carte" id="journal" aria-labelledby="titre-journal">
+        <h2 id="titre-journal">Journal public de modération</h2>
+        <p class="aide">Décisions de modération et changements de statut, les plus récents en premier. Les demandes de comptes n’y figurent pas, pour protéger les demandeurs.</p>
+        <div id="journal-contenu"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="app-footer"></footer>
+  <div id="annonce" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/regles.js"></script>
+</body>
+</html>

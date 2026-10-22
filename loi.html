@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proposition — AGORA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+  <header id="app-header"></header>
+
+  <main id="contenu" tabindex="-1">
+    <div class="conteneur conteneur-etroit" id="fiche-loi"></div>
+  </main>
+
+  <!-- Fenêtre de signalement d'un message -->
+  <dialog id="dialog-signalement" aria-labelledby="dialog-titre">
+    <form id="form-signalement" novalidate>
+      <h2 id="dialog-titre">Signaler ce message</h2>
+      <p class="aide">Un modérateur vérifiera le message. Votre signalement reste anonyme pour l’auteur.</p>
+      <fieldset>
+        <legend>Motif du signalement <span class="obligatoire" aria-hidden="true">*</span></legend>
+        <div id="motifs"></div>
+      </fieldset>
+      <p id="signalement-erreur" class="erreur" role="alert" hidden></p>
+      <div class="actions">
+        <button type="button" class="btn btn-secondaire" id="annuler-signalement">Annuler</button>
+        <button type="submit" class="btn btn-danger">Envoyer le signalement</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer id="app-footer"></footer>
+  <div id="annonce" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/loi.js"></script>
+</body>
+</html>

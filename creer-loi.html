@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Créer une loi — AGORA</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+  <header id="app-header"></header>
+
+  <main id="contenu" tabindex="-1">
+    <div class="conteneur conteneur-etroit" id="zone-creation">
+      <h1>Proposer une loi</h1>
+      <p class="aide">Décrivez votre idée simplement. Un modérateur la vérifie avant publication (statut « Soumise »), puis elle s’ouvre aux avis et au débat. Les champs marqués d’une <span class="obligatoire">*</span> sont obligatoires.</p>
+
+      <form id="form-loi" class="carte" novalidate>
+        <div class="champ">
+          <label for="titre">Titre de la proposition <span class="obligatoire" aria-hidden="true">*</span></label>
+          <input type="text" id="titre" maxlength="120" aria-describedby="titre-aide titre-compteur">
+          <p id="titre-compteur" class="compteur-car" aria-live="polite">0 / 120</p>
+          <p id="titre-aide" class="aide">Une phrase claire et neutre. Exemple : « Gratuité des transports pour les moins de 18 ans ».</p>
+        </div>
+
+        <div class="champ">
+          <label for="photo">Photo d’illustration <span class="facultatif">(facultatif, JPG ou PNG, 5 Mo maximum)</span></label>
+          <input type="file" id="photo" accept="image/png, image/jpeg, image/webp" aria-describedby="photo-aide">
+          <p id="photo-aide" class="aide">Évitez les photos où des personnes sont reconnaissables.</p>
+          <div id="apercu-photo" class="apercu-photo" hidden>
+            <img id="apercu-img" src="" alt="Aperçu de la photo choisie">
+            <button type="button" class="btn btn-discret" id="retirer-photo">Retirer la photo</button>
+          </div>
+        </div>
+
+        <div class="champ">
+          <label for="description">Description <span class="obligatoire" aria-hidden="true">*</span></label>
+          <textarea id="description" rows="8" maxlength="2000" aria-describedby="description-aide description-compteur"></textarea>
+          <p id="description-compteur" class="compteur-car" aria-live="polite">0 / 2000</p>
+          <p id="description-aide" class="aide">Quel problème voulez-vous résoudre ? Que proposez-vous concrètement ? Pour qui ? (80 caractères minimum)</p>
+        </div>
+
+        <div class="champ">
+          <label for="theme">Thème <span class="obligatoire" aria-hidden="true">*</span></label>
+          <select id="theme"></select>
+        </div>
+
+        <div class="grille-2">
+          <div class="champ">
+            <label for="region">Région concernée <span class="obligatoire" aria-hidden="true">*</span></label>
+            <select id="region"></select>
+          </div>
+          <div class="champ">
+            <label for="departement">Département <span class="obligatoire" aria-hidden="true">*</span></label>
+            <select id="departement"></select>
+          </div>
+        </div>
+
+        <div class="alerte alerte-info" role="note">
+          <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <p>Votre proposition sera publiée sous le nom affiché <strong id="pseudo-affiche"></strong>. Le responsable institutionnel pourra en rédiger une description officielle ; votre texte restera consultable.</p>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-accent">Envoyer ma proposition</button>
+          <a href="accueil.html" class="btn btn-secondaire">Annuler</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer id="app-footer"></footer>
+  <div id="annonce" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/creer-loi.js"></script>
+</body>
+</html>
