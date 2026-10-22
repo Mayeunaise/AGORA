@@ -236,12 +236,22 @@ const AGORA = (() => {
     if (window.AGORA_API) return chargerDepuisApi(window.AGORA_API);
     if (lire(CLES.version) === VERSION_DONNEES && lire(CLES.lois) && lire(CLES.users)) return;
     const [lois, users] = await Promise.all([lireJSON('data/lois.json'), lireJSON('data/users.json')]);
-    ecrire(CLES.lois, lois);
-    ecrire(CLES.users, users);
-    ecrire(CLES.avis, {});
-    ecrire(CLES.journal, journalInitial(lois));
+
+    // Nouvelle version des données de démo : on garde les comptes et les lois
+    // créés dans ce navigateur, sinon leurs auteurs ne pourraient plus se connecter
+    const anciensUsers = lire(CLES.users, []);
+    const anciennesLois = lire(CLES.lois, []);
+    const idsUsers = new Set(users.map(u => u.id));
+    const idsLois = new Set(lois.map(l => l.id));
+    const usersCrees = anciensUsers.filter(u => !idsUsers.has(u.id));
+    ecrire(CLES.lois, [...lois, ...anciennesLois.filter(l => !idsLois.has(l.id))]);
+    ecrire(CLES.users, [...users, ...usersCrees]);
+    ecrire(CLES.avis, lire(CLES.avis, {}));
+    ecrire(CLES.journal, lire(CLES.journal) || journalInitial(lois));
     ecrire(CLES.version, VERSION_DONNEES);
-    localStorage.removeItem(CLES.session);
+    // La session n'est gardée que si son compte existe toujours
+    const session = lire(CLES.session);
+    if (session && !idsUsers.has(session) && !usersCrees.some(u => u.id === session)) localStorage.removeItem(CLES.session);
   }
 
   /** Construit le journal public de modération à partir des décisions déjà présentes. */
@@ -615,19 +625,9 @@ const AGORA = (() => {
       nav += lien('regles.html', 'info', 'Règles');
       nav += `<button type="button" class="lien-nav" id="btn-deconnexion">${icone('sortie')}<span>Déconnexion</span></button>`;
 
-      // Sélecteur de rôle : uniquement pour faciliter la démonstration
-      const roleSelectionne = Object.keys(COMPTES_DEMO).find(r => COMPTES_DEMO[r] === user.id) || '';
-      nav += `
-        <div class="demo-role">
-          <label for="select-role">Mode démo</label>
-          <select id="select-role" aria-describedby="aide-demo">
-            ${roleSelectionne ? '' : '<option value="">Compte personnel</option>'}
-            ${Object.keys(COMPTES_DEMO).map(r => `<option value="${r}" ${r === roleSelectionne ? 'selected' : ''}>${ROLES[r]}</option>`).join('')}
-          </select>
-          <span id="aide-demo" class="sr-only">Change de compte de démonstration pour tester chaque rôle.</span>
-        </div>`;
     } else {
-      nav += lien('index.html', 'cadenas', 'Connexion');
+      nav += lien('index.html', 'agora', 'Présentation');
+      nav += lien('connexion.html', 'cadenas', 'Connexion');
       nav += lien('lois-adoptees.html', 'check', 'Lois adoptées');
       nav += lien('inscription.html', 'user', 'Créer un compte');
       nav += lien('regles.html', 'info', 'Règles');
@@ -675,13 +675,6 @@ const AGORA = (() => {
       // Si on quitte le mode modération depuis une page réservée, retour à l'accueil
       if (page.startsWith('moderation')) location.href = 'accueil.html';
       else location.reload();
-    });
-
-    const selectRole = header.querySelector('#select-role');
-    if (selectRole) selectRole.addEventListener('change', () => {
-      if (!selectRole.value) return;
-      connecter(COMPTES_DEMO[selectRole.value]);
-      location.href = 'accueil.html';
     });
   }
 
@@ -778,7 +771,7 @@ const AGORA = (() => {
 
     const user = utilisateurCourant();
     if (options.auth && !user) {
-      location.href = 'index.html';
+      location.href = 'connexion.html';
       return null;
     }
     renderHeader(user);

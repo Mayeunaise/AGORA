@@ -1,5 +1,5 @@
 /* =========================================================
-   AGORA — js/index.js
+   AGORA — js/connexion.js
    Page d'authentification (simulée).
    ========================================================= */
 'use strict';
@@ -66,7 +66,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (!compte) {
       // Message volontairement générique : on ne révèle pas si l'adresse existe
-      zoneErreur.innerHTML = `<div class="alerte alerte-erreur" role="alert">${AGORA.icone('alerte')}<p>Adresse mail ou mot de passe incorrect. Vérifiez votre saisie ou utilisez un compte de démonstration.</p></div>`;
+      zoneErreur.innerHTML = `<div class="alerte alerte-erreur" role="alert">${AGORA.icone('alerte')}<div><p>Adresse mail ou mot de passe incorrect. Vérifiez votre saisie ou utilisez un compte de démonstration.</p>
+        ${AGORA.enLigne() ? '' : '<p>Dans cette démo, les comptes sont enregistrés dans le navigateur où ils ont été créés : un compte créé sur un autre ordinateur ou un autre navigateur n’existe pas ici.</p>'}</div></div>`;
       motDePasse.value = '';
       motDePasse.focus();
       return;

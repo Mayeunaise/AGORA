@@ -223,22 +223,6 @@ img { max-width: 100%; display: block; }
   line-height: 1.5rem;
 }
 
-.demo-role {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.6rem 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  margin-top: 0.25rem;
-}
-.demo-role label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
-.demo-role select {
-  font: inherit;
-  padding: 0.4rem 0.5rem;
-  border-radius: var(--rayon-petit);
-  border: 1px solid #fff;
-}
-
 /* Bandeau permanent : avis consultatif */
 .bandeau-info {
   background: var(--accent-clair);
@@ -748,6 +732,49 @@ th { color: var(--bleu-fonce); background: var(--bleu-clair); }
 }
 .recherche-principale input:focus-visible { border-color: var(--bleu-fonce); }
 
+/* Filtre par thèmes : menu déroulant à choix multiple */
+.menu-themes { position: relative; }
+.champ-titre { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+.menu-themes-bouton {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font: inherit;
+  text-align: left;
+  color: var(--texte);
+  background: #fff;
+  border: 1.5px solid #8a94a8;
+  border-radius: var(--rayon-petit);
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+}
+.menu-themes-bouton span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.menu-themes-bouton[aria-expanded="true"] { border-color: var(--bleu); }
+.menu-themes-bouton[aria-expanded="true"] .icone { transform: rotate(180deg); }
+.menu-themes-panneau {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.3rem);
+  left: 0;
+  width: max(100%, 280px);
+  max-width: calc(100vw - 2rem);
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-petit);
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.18);
+  padding: 0.75rem;
+}
+.menu-themes-panneau .aide { font-size: 0.82rem; margin-bottom: 0.4rem; }
+.choix-theme { margin: 0; padding: 0.15rem 0.25rem; border-radius: var(--rayon-petit); }
+.choix-theme:hover { background: var(--fond); }
+.choix-theme input { accent-color: var(--theme-texte); }
+.choix-theme label { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; cursor: pointer; flex: 1; }
+.point-theme { width: 0.75rem; height: 0.75rem; border-radius: 50%; background: var(--theme-texte); }
+.menu-themes-actions { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.5rem; border-top: 1px solid var(--bordure); padding-top: 0.5rem; }
+
 /* Filtre par statut : pastilles cliquables */
 .filtre-statuts { border: none; padding: 0; margin: 0 0 0.5rem; }
 .filtre-statuts legend { font-weight: 600; margin-bottom: 0.4rem; }
@@ -828,6 +855,97 @@ dialog.presentation { width: min(92vw, 480px); padding: 1.75rem 1.5rem 1.25rem; 
 .engagement-neutralite .choix { margin: 0; align-items: flex-start; }
 .engagement-neutralite label { font-weight: 600; color: var(--bleu-fonce); }
 
+/* ---------- Page de présentation (index.html) ---------- */
+.vitrine-hero {
+  background: linear-gradient(160deg, var(--bleu-fonce) 0%, var(--bleu) 100%);
+  color: #fff;
+}
+.vitrine-hero-grille { display: grid; gap: 2rem; align-items: center; padding-top: 2.5rem; padding-bottom: 3rem; }
+.vitrine-hero h1 { color: #fff; font-size: clamp(2rem, 6vw, 3rem); line-height: 1.1; text-wrap: balance; margin-bottom: 0.75rem; }
+.surtitre { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #c7d4f5; margin-bottom: 0.75rem; }
+.vitrine-accroche { font-size: 1.15rem; color: #dfe6fa; max-width: 34em; margin-bottom: 1.5rem; }
+.vitrine-lien { margin-top: 1rem; }
+.vitrine-hero a:not(.btn) { color: #fff; }
+.vitrine-hero a:not(.btn):hover { color: #dfe6fa; }
+.btn-clair { background: transparent; color: #fff; border-color: #fff; }
+.btn-clair:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.vitrine-hero :focus-visible { outline-color: var(--focus); }
+
+.proposition-vedette { min-width: 0; }
+.vedette-titre { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #c7d4f5; margin-bottom: 0.5rem; }
+.proposition-vedette .carte { color: var(--texte); margin: 0; display: grid; gap: 0.6rem; }
+.proposition-vedette h2 { font-size: 1.2rem; margin: 0; }
+.proposition-vedette .barre-avis { margin-top: 0.25rem; }
+.proposition-vedette .aide { margin: 0; }
+.proposition-vedette .btn { justify-self: start; }
+
+.vitrine-section { padding: 2.25rem 0 0.5rem; }
+.vitrine-section > h2 { font-size: 1.5rem; }
+.vitrine-projet { display: grid; gap: 1.5rem; align-items: start; }
+.vitrine-projet p { max-width: 62ch; }
+.liste-objectifs, .principes { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+.liste-objectifs li, .principes li {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon-petit);
+  padding: 0.85rem 1rem;
+  display: grid;
+  gap: 0.2rem;
+  align-content: start;
+}
+.liste-objectifs strong, .principes strong { color: var(--bleu-fonce); }
+.liste-objectifs span, .principes span { color: var(--texte-doux); font-size: 0.95rem; }
+
+.parcours { list-style: none; counter-reset: etape; padding: 0; margin: 1rem 0 0; display: grid; gap: 1rem; }
+.parcours li {
+  counter-increment: etape;
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  padding: 1rem 1rem 1rem 3.25rem;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: start;
+  align-content: start;
+}
+.parcours li::before {
+  content: counter(etape);
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--bleu);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: grid;
+  place-items: center;
+}
+.parcours strong { color: var(--bleu-fonce); }
+.parcours li > span:last-child { color: var(--texte-doux); font-size: 0.93rem; }
+
+.roles { display: grid; gap: 1rem; }
+.roles .carte { margin: 0; }
+.roles h3 { color: var(--bleu-fonce); }
+.roles p { margin: 0; color: var(--texte-doux); }
+
+.vitrine-cta { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
+.vitrine-cta p { margin: 0; color: var(--texte-doux); max-width: 55ch; }
+
+@media (min-width: 640px) {
+  .roles { grid-template-columns: repeat(3, 1fr); }
+  .principes { grid-template-columns: 1fr 1fr; }
+  .parcours { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1000px) {
+  .vitrine-hero-grille { grid-template-columns: 1.2fr 1fr; padding-top: 3.5rem; padding-bottom: 4rem; }
+  .vitrine-projet { grid-template-columns: 1.3fr 1fr; }
+  .parcours { grid-template-columns: repeat(4, 1fr); }
+}
+
 @media (min-width: 640px) {
   .connexion-grille { grid-template-columns: 1.1fr 1fr; }
 }
@@ -835,7 +953,7 @@ dialog.presentation { width: min(92vw, 480px); padding: 1.75rem 1.5rem 1.25rem; 
 @media (min-width: 640px) {
   h1 { font-size: 2rem; }
   .grille-2 { grid-template-columns: 1fr 1fr; }
-  .grille-filtres { grid-template-columns: 1fr 1fr 1fr; align-items: end; }
+  .grille-filtres { grid-template-columns: 1fr 1fr; align-items: end; }
   .grille-lois { grid-template-columns: repeat(2, 1fr); }
   .hero { flex-direction: row; justify-content: space-between; align-items: flex-end; }
   .carte { padding: 1.5rem; }
@@ -843,6 +961,7 @@ dialog.presentation { width: min(92vw, 480px); padding: 1.75rem 1.5rem 1.25rem; 
 
 /* ---------- Ordinateurs : menu horizontal ---------- */
 @media (min-width: 1000px) {
+  .grille-filtres { grid-template-columns: repeat(4, 1fr); }
   .btn-menu { display: none; }
   .nav-principale {
     display: flex;
@@ -856,15 +975,6 @@ dialog.presentation { width: min(92vw, 480px); padding: 1.75rem 1.5rem 1.25rem; 
   .nav-principale a,
   .nav-principale button.lien-nav { padding: 0.45rem 0.6rem; font-size: 0.93rem; }
   .pastille-compteur { margin-left: 0.2rem; }
-  .demo-role {
-    flex-direction: row;
-    align-items: center;
-    border-top: none;
-    border-left: 1px solid rgba(255, 255, 255, 0.25);
-    margin: 0 0 0 0.4rem;
-    padding: 0 0 0 0.75rem;
-  }
-  .demo-role select { padding: 0.25rem 0.4rem; min-height: 36px; width: auto; }
   .grille-lois { grid-template-columns: repeat(3, 1fr); }
 }
 

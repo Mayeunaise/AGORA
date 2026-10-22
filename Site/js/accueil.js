@@ -2,7 +2,7 @@
    AGORA — js/accueil.js
    Liste des propositions publiques, triées par défaut par
    nombre d'avis favorables, avec recherche, pastilles de statut
-   et filtres région / département. Les lois adoptées ont leur page.
+   et filtres thèmes (choix multiple) / région / département. Les lois adoptées ont leur page.
    ========================================================= */
 'use strict';
 
@@ -40,6 +40,45 @@ document.addEventListener('DOMContentLoaded', async () => {
       <span class="pastille" aria-hidden="true"></span>${A.icone('check', 'coche')}${A.esc(A.STATUTS[s].label)}
     </label>`).join('');
   const statutsChoisis = () => [...pucesStatut.querySelectorAll('input:checked')].map(c => c.value);
+
+  /* --- Menu déroulant des thèmes (choix multiple) --- */
+  const boutonThemes = $('bouton-themes');
+  const panneauThemes = $('panneau-themes');
+  const listeThemes = $('liste-filtre-themes');
+  listeThemes.innerHTML = A.THEMES.map((t, i) => `
+    <div class="choix choix-theme" style="${A.styleTheme(t)}">
+      <input type="checkbox" id="filtre-theme-${i}" name="filtre-theme" value="${A.esc(t)}">
+      <label for="filtre-theme-${i}"><span class="point-theme" aria-hidden="true"></span>${A.esc(t)}</label>
+    </div>`).join('');
+  const themesChoisis = () => [...listeThemes.querySelectorAll('input:checked')].map(c => c.value);
+
+  function majResumeThemes() {
+    const choisis = themesChoisis();
+    $('resume-themes').textContent = !choisis.length ? 'Tous les thèmes'
+      : choisis.length <= 2 ? choisis.join(', ') : `${choisis.length} thèmes choisis`;
+  }
+
+  function ouvrirThemes(ouvrir) {
+    panneauThemes.hidden = !ouvrir;
+    boutonThemes.setAttribute('aria-expanded', String(ouvrir));
+    if (ouvrir) listeThemes.querySelector('input').focus();
+  }
+
+  boutonThemes.addEventListener('click', () => ouvrirThemes(panneauThemes.hidden));
+  $('fermer-themes').addEventListener('click', () => { ouvrirThemes(false); boutonThemes.focus(); });
+  $('effacer-themes').addEventListener('click', () => {
+    listeThemes.querySelectorAll('input').forEach(c => { c.checked = false; });
+    majResumeThemes();
+    afficher();
+  });
+  listeThemes.addEventListener('change', () => { majResumeThemes(); afficher(); });
+  // Fermeture avec Échap ou en cliquant ailleurs
+  panneauThemes.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { ouvrirThemes(false); boutonThemes.focus(); }
+  });
+  document.addEventListener('click', e => {
+    if (!panneauThemes.hidden && !e.target.closest('.menu-themes')) ouvrirThemes(false);
+  });
 
   /* --- Présentation de l'app : ouverte automatiquement à la première visite --- */
   $('btn-presentation').addEventListener('click', A.ouvrirPresentation);
@@ -93,6 +132,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (departement.value) lois = lois.filter(l => l.departement === departement.value);
     const choisis = statutsChoisis();
     if (choisis.length) lois = lois.filter(l => choisis.includes(l.statut));
+    const themes = themesChoisis();
+    if (themes.length) lois = lois.filter(l => A.themesDe(l).some(t => themes.includes(t)));
 
     const comparateurs = {
       popularite: (a, b) => b.pour - a.pour,
@@ -139,6 +180,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Attendre que le navigateur ait réinitialisé les champs
     setTimeout(() => {
       region.dispatchEvent(new Event('change'));
+      majResumeThemes();
+      ouvrirThemes(false);
       afficher();
       recherche.focus();
     }, 0);

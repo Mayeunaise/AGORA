@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Propositions citoyennes — AGORA</title>
-  <link rel="stylesheet" href="css/style.css?v=7">
+  <link rel="stylesheet" href="css/style.css?v=9">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -46,6 +46,21 @@
           </fieldset>
 
           <div class="grille-filtres">
+            <div class="champ menu-themes">
+              <span class="champ-titre" id="titre-filtre-themes">Thèmes</span>
+              <button type="button" class="menu-themes-bouton" id="bouton-themes" aria-expanded="false" aria-controls="panneau-themes" aria-labelledby="titre-filtre-themes resume-themes">
+                <span id="resume-themes">Tous les thèmes</span>
+                <svg class="icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="menu-themes-panneau" id="panneau-themes" role="group" aria-labelledby="titre-filtre-themes" hidden>
+                <p class="aide">Plusieurs choix possibles : une proposition s’affiche si elle a au moins un des thèmes cochés.</p>
+                <div id="liste-filtre-themes"></div>
+                <div class="menu-themes-actions">
+                  <button type="button" class="btn btn-discret" id="effacer-themes">Tout décocher</button>
+                  <button type="button" class="btn btn-primaire" id="fermer-themes">Valider</button>
+                </div>
+              </div>
+            </div>
             <div class="champ">
               <label for="filtre-region">Région</label>
               <select id="filtre-region"></select>
@@ -84,8 +99,8 @@
   <footer id="app-footer"></footer>
   <div id="annonce" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="js/api-config.js?v=7"></script>
-  <script src="js/app.js?v=7"></script>
-  <script src="js/accueil.js?v=7"></script>
+  <script src="js/api-config.js?v=9"></script>
+  <script src="js/app.js?v=9"></script>
+  <script src="js/accueil.js?v=9"></script>
 </body>
 </html>
