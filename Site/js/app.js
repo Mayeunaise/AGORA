@@ -1,7 +1,8 @@
 /* =========================================================
    AGORA — js/app.js
    Fichier commun à toutes les pages :
-   - chargement des données fictives (data/*.json) dans localStorage
+   - données partagées dans Firebase Firestore (js/firebase-config.js),
+     ou, sans configuration, données fictives (data/*.json) dans localStorage
    - session SIMULÉE (aucune sécurité réelle : prototype pédagogique)
    - rôles, mode modération, header, bandeau, pied de page
    - utilitaires (icônes SVG, dates, validation de formulaires, annonces)
@@ -137,8 +138,104 @@ const AGORA = (() => {
     return reponse.json();
   }
 
-  /** Charge les données fictives au premier lancement (ou après réinitialisation). */
+  /* ---------- Base de données partagée (Firebase Firestore) ---------- */
+  // Sans configuration dans js/firebase-config.js, tout reste dans le navigateur.
+  const VERSION_FIREBASE = '10.12.2';
+  const COLLECTIONS = ['lois', 'users', 'avis', 'journal'];
+  let fs = null;  // fonctions du SDK Firestore
+  let db = null;
+  // Copie en mémoire de la base, tenue à jour en temps réel
+  const memoire = { lois: [], users: [], avis: {}, journal: [] };
+  const enregistrements = new Set();
+
+  const enLigne = () => db !== null;
+  const copie = valeur => JSON.parse(JSON.stringify(valeur));
+
+  /** Suit une écriture en ligne et prévient en cas d'échec. */
+  function suivre(promesse) {
+    const suivie = promesse
+      .catch(e => {
+        console.error(e);
+        annoncer('Enregistrement en ligne impossible : vérifiez votre connexion puis réessayez.');
+      })
+      .finally(() => enregistrements.delete(suivie));
+    enregistrements.add(suivie);
+  }
+
+  /** À appeler avant de changer de page juste après une écriture. */
+  const attendreEnregistrements = () => Promise.all([...enregistrements]);
+
+  function remplir(nom, snap) {
+    if (nom === 'avis') {
+      memoire.avis = Object.fromEntries(snap.docs.map(d => [d.id, d.data()]));
+      return;
+    }
+    memoire[nom] = snap.docs.map(d => d.data());
+    if (nom === 'lois') memoire.lois.sort((a, b) => new Date(a.dateCreation) - new Date(b.dateCreation));
+    if (nom === 'journal') memoire.journal.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+
+  async function chargerDepuisFirebase(config) {
+    const base = `https://www.gstatic.com/firebasejs/${VERSION_FIREBASE}`;
+    const [{ initializeApp }, sdk] = await Promise.all([
+      import(`${base}/firebase-app.js`),
+      import(`${base}/firebase-firestore.js`)
+    ]);
+    fs = sdk;
+    db = fs.initializeFirestore(initializeApp(config), {
+      localCache: fs.persistentLocalCache({ tabManager: fs.persistentMultipleTabManager() })
+    });
+    // Tests en local avec l'émulateur Firebase : emulateur: ['127.0.0.1', 8085]
+    if (config.emulateur) fs.connectFirestoreEmulator(db, ...config.emulateur);
+
+    // Premier lancement : la base est remplie avec les données fictives
+    const meta = await fs.getDoc(fs.doc(db, 'meta', 'donnees'));
+    if (!meta.exists()) await initialiserBase();
+
+    const snaps = await Promise.all(COLLECTIONS.map(nom => fs.getDocs(fs.collection(db, nom))));
+    COLLECTIONS.forEach((nom, i) => remplir(nom, snaps[i]));
+
+    // Mises à jour en direct : les pages peuvent écouter l'événement « agora:donnees »
+    COLLECTIONS.forEach(nom => fs.onSnapshot(fs.collection(db, nom), snap => {
+      remplir(nom, snap);
+      document.dispatchEvent(new CustomEvent('agora:donnees', { detail: nom }));
+    }));
+  }
+
+  async function initialiserBase() {
+    const [lois, users] = await Promise.all([lireJSON('data/lois.json'), lireJSON('data/users.json')]);
+    const lot = fs.writeBatch(db);
+    lois.forEach(l => lot.set(fs.doc(db, 'lois', l.id), l));
+    users.forEach(u => lot.set(fs.doc(db, 'users', u.id), u));
+    journalInitial(lois).forEach((entree, i) => lot.set(fs.doc(db, 'journal', `J-initial-${i}`), entree));
+    lot.set(fs.doc(db, 'meta', 'donnees'), { version: VERSION_DONNEES, date: new Date().toISOString() });
+    await lot.commit();
+  }
+
+  /**
+   * Fusionne une loi modifiée avec sa version en ligne, pour ne pas effacer
+   * le travail des autres : messages réunis, compteurs d'avis gardés en ligne.
+   */
+  function fusionnerLoi(versionEnLigne, locale) {
+    if (!versionEnLigne) return locale;
+    const messages = new Map((versionEnLigne.messages || []).map(m => [m.id, m]));
+    locale.messages.forEach(m => messages.set(m.id, m));
+    return {
+      ...locale,
+      pour: versionEnLigne.pour,
+      contre: versionEnLigne.contre,
+      messages: [...messages.values()].sort((a, b) => new Date(a.date) - new Date(b.date))
+    };
+  }
+
+  function remplacer(liste, element) {
+    const index = liste.findIndex(e => e.id === element.id);
+    if (index === -1) liste.push(element); else liste[index] = element;
+  }
+
+  /** Charge les données : base en ligne si configurée, sinon données fictives locales. */
   async function chargerDonnees() {
+    if (window.AGORA_FIREBASE) return chargerDepuisFirebase(window.AGORA_FIREBASE);
     if (lire(CLES.version) === VERSION_DONNEES && lire(CLES.lois) && lire(CLES.users)) return;
     const [lois, users] = await Promise.all([lireJSON('data/lois.json'), lireJSON('data/users.json')]);
     ecrire(CLES.lois, lois);
@@ -162,29 +259,55 @@ const AGORA = (() => {
       }));
   }
 
-  /** Efface toutes les données locales et repart des fichiers JSON. */
+  /**
+   * Efface les données locales et repart des fichiers JSON.
+   * Avec la base en ligne, seules la session et les préférences de ce navigateur sont effacées.
+   */
   function reinitialiser() {
-    Object.values(CLES).forEach(cle => localStorage.removeItem(cle));
+    const cles = enLigne() ? [CLES.session, CLES.mode, CLES.bandeau] : Object.values(CLES);
+    cles.forEach(cle => localStorage.removeItem(cle));
     location.href = 'index.html';
   }
 
   /* ---------- Accès aux données ---------- */
-  const getLois = () => lire(CLES.lois, []);
+  const getLois = () => enLigne() ? copie(memoire.lois) : lire(CLES.lois, []);
   const saveLois = lois => ecrire(CLES.lois, lois);
-  const getLoi = id => getLois().find(l => l.id === id) || null;
+
+  function getLoi(id) {
+    const loi = (enLigne() ? memoire.lois : lire(CLES.lois, [])).find(l => l.id === id);
+    return loi ? copie(loi) : null;
+  }
 
   function saveLoi(loiModifiee) {
+    if (enLigne()) {
+      remplacer(memoire.lois, copie(loiModifiee));
+      const ref = fs.doc(db, 'lois', loiModifiee.id);
+      suivre(fs.runTransaction(db, async t => {
+        const actuelle = await t.get(ref);
+        t.set(ref, fusionnerLoi(actuelle.exists() ? actuelle.data() : null, loiModifiee));
+      }));
+      return true;
+    }
     const lois = getLois();
     const index = lois.findIndex(l => l.id === loiModifiee.id);
     if (index === -1) lois.push(loiModifiee); else lois[index] = loiModifiee;
     return saveLois(lois);
   }
 
-  const getUsers = () => lire(CLES.users, []);
+  const getUsers = () => enLigne() ? copie(memoire.users) : lire(CLES.users, []);
   const saveUsers = users => ecrire(CLES.users, users);
-  const getUser = id => getUsers().find(u => u.id === id) || null;
+
+  function getUser(id) {
+    const user = (enLigne() ? memoire.users : lire(CLES.users, [])).find(u => u.id === id);
+    return user ? copie(user) : null;
+  }
 
   function saveUser(userModifie) {
+    if (enLigne()) {
+      remplacer(memoire.users, copie(userModifie));
+      suivre(fs.setDoc(fs.doc(db, 'users', userModifie.id), userModifie));
+      return true;
+    }
     const users = getUsers();
     const index = users.findIndex(u => u.id === userModifie.id);
     if (index === -1) users.push(userModifie); else users[index] = userModifie;
@@ -200,11 +323,17 @@ const AGORA = (() => {
   }
 
   function ajouterJournal(entree) {
+    const complete = { date: new Date().toISOString(), ...entree };
+    if (enLigne()) {
+      memoire.journal.unshift(complete);
+      suivre(fs.addDoc(fs.collection(db, 'journal'), complete));
+      return;
+    }
     const journal = lire(CLES.journal, []);
-    journal.unshift({ date: new Date().toISOString(), ...entree });
+    journal.unshift(complete);
     ecrire(CLES.journal, journal);
   }
-  const getJournal = () => lire(CLES.journal, []);
+  const getJournal = () => enLigne() ? copie(memoire.journal) : lire(CLES.journal, []);
 
   /* ---------- Session simulée ---------- */
   function utilisateurCourant() {
@@ -244,7 +373,7 @@ const AGORA = (() => {
 
   /* ---------- Avis consultatifs ---------- */
   function getAvis(userId, loiId) {
-    const avis = lire(CLES.avis, {});
+    const avis = enLigne() ? memoire.avis : lire(CLES.avis, {});
     return (avis[userId] && avis[userId][loiId]) || null;
   }
 
@@ -254,7 +383,7 @@ const AGORA = (() => {
    * Renvoie l'avis final : 'pour', 'contre' ou null.
    */
   function donnerAvis(userId, loiId, valeur) {
-    const avis = lire(CLES.avis, {});
+    const avis = enLigne() ? memoire.avis : lire(CLES.avis, {});
     const loi = getLoi(loiId);
     if (!loi) return null;
     avis[userId] = avis[userId] || {};
@@ -268,6 +397,16 @@ const AGORA = (() => {
       avis[userId][loiId] = valeur;
     } else {
       delete avis[userId][loiId];
+    }
+    if (enLigne()) {
+      // Compteurs incrémentés en ligne : deux avis simultanés ne s'écrasent pas
+      remplacer(memoire.lois, loi);
+      const compteurs = {};
+      if (precedent) compteurs[precedent] = fs.increment(-1);
+      if (final) compteurs[final] = fs.increment(1);
+      suivre(fs.updateDoc(fs.doc(db, 'lois', loiId), compteurs));
+      suivre(fs.setDoc(fs.doc(db, 'avis', userId), { [loiId]: final || fs.deleteField() }, { merge: true }));
+      return final;
     }
     saveLoi(loi);
     ecrire(CLES.avis, avis);
@@ -551,11 +690,13 @@ const AGORA = (() => {
     try {
       await chargerDonnees();
     } catch (e) {
+      console.error(e);
       renderFooter();
       if (main) {
         main.innerHTML = `<div class="conteneur conteneur-etroit"><div class="alerte alerte-erreur" role="alert">${icone('alerte')}<div>
           <p><strong>Les données de démonstration n’ont pas pu être chargées.</strong></p>
-          <p>Ouvrez le site avec un serveur local (extension Live Server de VS Code) ou via son adresse GitHub Pages, et non en double-cliquant sur le fichier.</p></div></div></div>`;
+          <p>Ouvrez le site avec un serveur local (extension Live Server de VS Code) ou via son adresse GitHub Pages, et non en double-cliquant sur le fichier.</p>
+          <p>Si la base en ligne est activée, vérifiez votre connexion Internet et la configuration dans js/firebase-config.js.</p></div></div></div>`;
       }
       return null;
     }
@@ -581,7 +722,7 @@ const AGORA = (() => {
   /* ---------- API publique ---------- */
   return {
     ROLES, STATUTS, STATUTS_PUBLICS, THEMES, REGIONS, MOTIFS_SIGNALEMENT, ICONE_THEME, COMPTES_DEMO,
-    icone, demarrer, reinitialiser, renderHeader,
+    icone, demarrer, reinitialiser, renderHeader, enLigne, attendreEnregistrements,
     getLois, getLoi, saveLoi, getUsers, getUser, saveUser,
     utilisateurCourant, connecter, deconnecter, authentifier, estModeModeration,
     getAvis, donnerAvis, compterAlertes, compterDemandesComptes,

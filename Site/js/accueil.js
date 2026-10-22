@@ -119,5 +119,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 0);
   });
 
+  // Base en ligne : la liste se met à jour quand quelqu'un publie ou donne un avis
+  document.addEventListener('agora:donnees', e => { if (e.detail === 'lois') afficher(); });
+
   afficher();
 });

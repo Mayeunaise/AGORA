@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     caseInstitution.setAttribute('aria-expanded', String(caseInstitution.checked));
   });
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     const emailExiste = v => !AGORA.getUsers().some(u => u.email.toLowerCase() === v.toLowerCase());
     const regles = [
@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!AGORA.saveUser(nouveau)) return;
     AGORA.connecter(nouveau.id);
+    await AGORA.attendreEnregistrements();
     location.href = 'accueil.html?bienvenue=1';
   });
 });
