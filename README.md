@@ -77,3 +77,6 @@ data/users.json        Comptes fictifs
 ## Outils utilisés
 
 Code généré avec l'aide d'un LLM (Claude) à partir du cahier des charges et du diagramme des parcours du groupe, puis relu et testé par le groupe.
+
+## Charte graphique 
+https://claude.ai/artifact/EPYZiuDYFGdLbnjWNQCnCY
